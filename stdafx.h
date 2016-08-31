@@ -4,6 +4,9 @@
 //
 
 #pragma once
+#ifndef _HEADERS_
+#define _HEADERS_
+
 
 #include "targetver.h"
 
@@ -16,3 +19,7 @@
 #include "GameUtilities.h"
 #include "Scenes.h"
 #include "GameScene.h"
+
+#include "SDL_image.h"
+
+#endif

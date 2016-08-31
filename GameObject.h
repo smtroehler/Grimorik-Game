@@ -1,8 +1,12 @@
 #pragma once
 
+#ifndef _GAMEOBJECT_H_
+#define _GAMEOBJECT_H_
+
 #include "SDL.h"
 #include "GameUtilities.h"
 
+#include "SDL_image.h"
 class GameObject
 {
    public:
@@ -39,3 +43,5 @@ class GameObject
       SDL_Texture *bitmapTex = NULL;
       SDL_Rect fillRect;
 };
+
+#endif

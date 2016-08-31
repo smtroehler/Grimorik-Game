@@ -1,12 +1,19 @@
 #pragma once
 
+#ifndef _SCENES_H_
+#define _SCENES_H_
+
 #include "SDL.h"
 #include "GameObject.h"
 #include "GameScene.h"
+#include <vector>
+
+#include <stdlib.h>
 class SceneTown : public GameScene
 {
    public:
       SceneTown();
+      virtual ~SceneTown();
       virtual void setup(WorldInfo *world);
       virtual int processControl(float dt);
       virtual void update(float dt);
@@ -16,5 +23,13 @@ class SceneTown : public GameScene
       GameObject *temp_player;
       GameObject *temp_player_static;
       glm::vec2 playerVel = glm::vec2(0, 0);
-      bool isMovingX = false, isMovingY = false;
+      bool isMovingX = false;
+      bool isMovingY = false;
+  
+      WorldInfo *world_info;
+      float rectCoordX = 0;
+      float rectCoordY = 0;
+  //    std::vector<int> objects;
 };
+
+#endif

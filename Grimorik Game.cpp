@@ -4,8 +4,9 @@
 #include "stdafx.h"
 
 #include <stdlib.h>
-
-
+#define _ITERATOR_DEBUG_LEVEL 0
+#include <cstring>
+#include <vector>
 void gameLoop( WorldInfo *world_info)
 {
    int cameraX = 0;
@@ -18,14 +19,9 @@ void gameLoop( WorldInfo *world_info)
    Uint32 ticks;
    float seconds;
    float prev = 0, cur, dt = 0.0f;
-
-   GameObject *temp_player;
-   temp_player = new GameObject(0, 0, 0, 80, 80, world_info);
-   temp_player->setImage("materials/test/noct.bmp");
-
-   GameObject *temp_player_static;
-   temp_player_static = new GameObject(0, 0, 0, 120, 120, world_info);
-   temp_player_static->setImage("materials/test/noct.bmp");
+   SceneTown scene1;
+   scene1.setup(world_info);
+   std::vector<int> as;
    while (1) {
       ticks = SDL_GetTicks();
       seconds = (float) ticks / 1000.0f;
@@ -33,84 +29,18 @@ void gameLoop( WorldInfo *world_info)
       float dtsec = dt / 1000.0f;
       prev = ticks;
 
-      SDL_Event e;
-      if (SDL_PollEvent(&e)) {
-         /* an event was found */
-         switch (e.type) {
-            /* close button clicked */
-            case SDL_QUIT:
-               return;
-               break;
-            /* handle the keyboard */
-            case SDL_KEYDOWN:
-               switch (e.key.keysym.sym) {
-                  case SDLK_ESCAPE:
-                  return;
-                  break;
-               }
-               break;
-         }
-
-      }
-
-
-      const Uint8* keystate = SDL_GetKeyboardState(NULL);
-
-      static glm::vec2 playerVel = glm::vec2(0,0);
-      bool isMovingX = false, isMovingY = false;
-      //continuous-response keys
-      if (keystate[SDL_SCANCODE_A])
-      {
-         
-         playerVel.x = -300;
-         isMovingX = true;
-      }
-      if (keystate[SDL_SCANCODE_D])
-      {
-         playerVel.x = 300;
-         isMovingX = true;
-      }
-      if (keystate[SDL_SCANCODE_W])
-      {
-         playerVel.y = -300;
-         isMovingY = true;
-      }
-      if (keystate[SDL_SCANCODE_S])
-      {
-         playerVel.y = 300;
-         isMovingY = true;
-      }
       
-      if (isMovingX == false)
-      {
-         playerVel.x += 15 * -playerVel.x * dtsec;
-      }
-
-      if (isMovingY == false)
-      {
-         playerVel.y += 15 * -playerVel.y * dtsec;
-      }
-      rectCoordX += playerVel.x * dtsec;
-      rectCoordY += playerVel.y * dtsec;
-
-      temp_player->setWorldPos((int)rectCoordX, (int)rectCoordY);
-
-      glm::vec2 dif = glm::vec2(rectCoordX - world_info->cameraPosX, rectCoordY - world_info->cameraPosY);
-     
-      world_info->cameraPosX = (int)rectCoordX;
-      world_info->cameraPosY = (int)rectCoordY;
-      
-      // END SPRINGY CAMERA 
+      if (scene1.processControl(dtsec) == -1)
+         return;
+      scene1.update(dtsec);
 
       // clears the screen
       SDL_SetRenderDrawColor(world_info->renderer, 0x00, 0x00, 0x00, 0xFF);
       SDL_RenderClear(world_info->renderer);
 
-      // creates test rectangle to render to
+
+      scene1.render(dtsec);
       
-      temp_player->render();
-      temp_player_static->render();
-      SDL_RenderPresent(world_info->renderer);
    }
 }
 

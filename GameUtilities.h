@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef _GAMEUTILITIES_H_
+#define _GAMEUTILITIES_H_
+
+
 #include "SDL.h"
 #include "glm/glm.hpp"
 struct BoundingBox {
@@ -21,3 +25,4 @@ struct WorldInfo
    SDL_Renderer *renderer;
    SDL_Window *win;
 };
+#endif

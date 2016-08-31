@@ -1,7 +1,13 @@
 #pragma once
 
+#ifndef _GAMESCENE_H_
+#define _GAMESCENE_H_
+
 #include "SDL.h"
 #include "GameUtilities.h"
+#include <vector>
+#include "GameObject.h"
+
 class GameScene
 {
    public:
@@ -11,5 +17,7 @@ class GameScene
       virtual void update(float dt) = 0;
       virtual void render(float dt) = 0;
 
-      WorldInfo *world_info;
+   
 };
+
+#endif

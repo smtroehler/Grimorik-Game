@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "GameUtilities.h"
+#include "SDL_image.h"
 GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
 {
    worldX = x;
@@ -32,9 +33,15 @@ int GameObject::getScreenY()
 void GameObject::setImage(const char* file)
 {
    SDL_Surface *temp;
-   temp = SDL_LoadBMP(file);
+   temp = IMG_Load(file);
+   SDL_SetColorKey(temp, SDL_TRUE, SDL_MapRGB(temp->format, 0xFF, 0, 0xFF));
+   
    bitmapTex = SDL_CreateTextureFromSurface(info_ptr->renderer, temp);
+
+
    SDL_FreeSurface(temp);
+
+  
 }
 
 float GameObject::getWorldX()
@@ -61,6 +68,8 @@ void GameObject::render() {
    fillRect.x = (int) worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
    fillRect.y = (int) worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2;
 
+
+   
 
    SDL_SetRenderDrawColor(info_ptr->renderer, colorR, colorG, colorB, colorA);
    SDL_RenderFillRect(info_ptr->renderer, &fillRect);
