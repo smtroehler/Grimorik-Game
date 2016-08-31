@@ -22,11 +22,11 @@ GameObject::~GameObject() {}
 
 int GameObject::getScreenX()
 {
-   return  worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
+   return  worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 ;
 }
 int GameObject::getScreenY()
 {
-   return worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2;
+   return worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 ;
 }
 
 void GameObject::setImage(const char* file)

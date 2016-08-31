@@ -4,6 +4,8 @@
 #include "stdafx.h"
 
 #include <stdlib.h>
+
+
 void gameLoop( WorldInfo *world_info)
 {
    int cameraX = 0;
@@ -14,11 +16,11 @@ void gameLoop( WorldInfo *world_info)
    float rectCoordX = 0, rectCoordY = 0;
 
    Uint32 ticks;
-   Uint32 seconds;
-   float prev = 0, cur, dt = 0;
+   float seconds;
+   float prev = 0, cur, dt = 0.0f;
 
    GameObject *temp_player;
-   temp_player = new GameObject(0, 0, 0, 120, 120, world_info);
+   temp_player = new GameObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.bmp");
 
    GameObject *temp_player_static;
@@ -26,9 +28,9 @@ void gameLoop( WorldInfo *world_info)
    temp_player_static->setImage("materials/test/noct.bmp");
    while (1) {
       ticks = SDL_GetTicks();
-      seconds = ticks / 1000;
+      seconds = (float) ticks / 1000.0f;
       dt = ticks - prev;
-      float dtsec = dt / 1000;
+      float dtsec = dt / 1000.0f;
       prev = ticks;
 
       SDL_Event e;
@@ -54,68 +56,50 @@ void gameLoop( WorldInfo *world_info)
 
       const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-      glm::vec2 playerVel = glm::vec2(0,0);
-
+      static glm::vec2 playerVel = glm::vec2(0,0);
+      bool isMovingX = false, isMovingY = false;
       //continuous-response keys
       if (keystate[SDL_SCANCODE_A])
       {
-         playerVel.x = -200;
-         std::cout << temp_player->getWorldX() << "\n";
-         std::cout << world_info->cameraPosX << "\n";
-         std::cout << temp_player->getScreenX() << "\n";
+         
+         playerVel.x = -300;
+         isMovingX = true;
       }
       if (keystate[SDL_SCANCODE_D])
       {
-         playerVel.x = 200;
-         std::cout << temp_player->getWorldX() << "\n";
-         std::cout << world_info->cameraPosX << "\n";
-         std::cout << temp_player->getScreenX() << "\n";
+         playerVel.x = 300;
+         isMovingX = true;
       }
       if (keystate[SDL_SCANCODE_W])
       {
-         playerVel.y = -200;
-         std::cout << temp_player->getWorldY() << "\n";
-         std::cout << world_info->cameraPosY << "\n";
-         std::cout << temp_player->getScreenY() << "\n";
+         playerVel.y = -300;
+         isMovingY = true;
       }
       if (keystate[SDL_SCANCODE_S])
       {
-         playerVel.y = 200 ;
-         std::cout << temp_player->getWorldY() << "\n";
-         std::cout << world_info->cameraPosY << "\n";
-         std::cout << temp_player->getScreenY() << "\n";
+         playerVel.y = 300;
+         isMovingY = true;
       }
-   
-      rectCoordX += playerVel.x *dtsec;
-      rectCoordY += playerVel.y *dtsec;
+      
+      if (isMovingX == false)
+      {
+         playerVel.x += 15 * -playerVel.x * dtsec;
+      }
 
+      if (isMovingY == false)
+      {
+         playerVel.y += 15 * -playerVel.y * dtsec;
+      }
+      rectCoordX += playerVel.x * dtsec;
+      rectCoordY += playerVel.y * dtsec;
 
       temp_player->setWorldPos((int)rectCoordX, (int)rectCoordY);
-         
-      // THIS SECTION DEALS WITH SPRINGY CAMERA 
-      float ks = 1; // spring constant
-      glm::vec2 L = glm::vec2(temp_player->getWorldX() - world_info->cameraPosX, temp_player->getWorldY() - world_info->cameraPosY);
-      float r = 60; // resting length
-      float dist = std::abs(glm::length(L));
-      glm::vec2 dv = glm::vec2(-playerVel.x + world_info->cameraVelocity.y, -playerVel.y + world_info->cameraVelocity.y);
-      float kd = 5; // damping constant
-      if (dist > r)
-      {
-         std::cout << " here\n";
-         glm::vec2 force = -((ks * (glm::length(L) - r) + kd * (glm::dot(dv, (L)))) / glm::length(L)) * (L * (1.0f / glm::length(L)));
 
-         float mass = 10.0;
-
-         glm::vec2 F1 = -ks * (dist - r) * (glm::normalize(L) * (1.0f / dist)) - kd * (dv);
-         std::cout << force.x << "\n";
-         std::cout << force.y << "\n";
-         F1 = -F1;
-         world_info->cameraVelocity.x += F1.x * dtsec / mass;
-         world_info->cameraVelocity.y += F1.y * dtsec / mass;
-      }
-
-      world_info->cameraPosX += (int)world_info->cameraVelocity.x * dtsec;
-      world_info->cameraPosY += (int)world_info->cameraVelocity.y * dtsec;
+      glm::vec2 dif = glm::vec2(rectCoordX - world_info->cameraPosX, rectCoordY - world_info->cameraPosY);
+     
+      world_info->cameraPosX = (int)rectCoordX;
+      world_info->cameraPosY = (int)rectCoordY;
+      
       // END SPRINGY CAMERA 
 
       // clears the screen
@@ -142,6 +126,8 @@ int main(int argc, char* argv[])
    world_info->screenWidth = 800;
    world_info->screenHeight = 600;
    world_info->cameraVelocity = glm::vec3(0, 0, 0);
+   world_info->cameraAccel = glm::vec3(0, 0, 0);
+   
    SDL_Init(SDL_INIT_VIDEO);
 
    world_info->win = SDL_CreateWindow("Hello World", posX, posY, width, height, 0);

@@ -16,6 +16,7 @@ struct WorldInfo
    int cameraPosY;
    int cameraPosZ;
    glm::vec3 cameraVelocity;
+   glm::vec3 cameraAccel;
    float dt;
    SDL_Renderer *renderer;
    SDL_Window *win;
