@@ -22,11 +22,11 @@ GameObject::~GameObject() {}
 
 int GameObject::getScreenX()
 {
-   return  worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 ;
+   return  (int) worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 ;
 }
 int GameObject::getScreenY()
 {
-   return worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 ;
+   return (int) worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 ;
 }
 
 void GameObject::setImage(const char* file)
@@ -37,12 +37,12 @@ void GameObject::setImage(const char* file)
    SDL_FreeSurface(temp);
 }
 
-int GameObject::getWorldX()
+float GameObject::getWorldX()
 {
    return worldX;
 }
 
-int GameObject::getWorldY()
+float GameObject::getWorldY()
 {
    return worldY;
 }
@@ -58,8 +58,8 @@ void GameObject::update(float dt) {}
 
 void GameObject::render() {
 
-   fillRect.x = worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
-   fillRect.y = worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2;
+   fillRect.x = (int) worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
+   fillRect.y = (int) worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2;
 
 
    SDL_SetRenderDrawColor(info_ptr->renderer, colorR, colorG, colorB, colorA);

@@ -14,3 +14,5 @@
 // TODO: reference additional headers your program requires here
 #include "GameObject.h"
 #include "GameUtilities.h"
+#include "Scenes.h"
+#include "GameScene.h"

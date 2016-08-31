@@ -16,8 +16,8 @@ class GameObject
       int getScreenX();
       int getScreenY();
       int getZ();
-      int getWorldX();
-      int getWorldY();
+      float getWorldX();
+      float getWorldY();
       int   getWidth();
       int   getHeight();
 
@@ -27,7 +27,8 @@ class GameObject
      
    private:
       // Keeps track of world coords.
-      int worldX, worldY, worldZ, width, height;
+      float worldX, worldY, worldZ;
+      int width, height;
       int colorR, colorG, colorB, colorA;
       BoundingBox bbox;
 
