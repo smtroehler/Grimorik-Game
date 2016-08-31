@@ -21,7 +21,7 @@ void gameLoop( WorldInfo *world_info)
    float prev = 0, cur, dt = 0.0f;
    SceneTown scene1;
    scene1.setup(world_info);
-   std::vector<int> as;
+  // std::vector<int> as;
    while (1) {
       ticks = SDL_GetTicks();
       seconds = (float) ticks / 1000.0f;
