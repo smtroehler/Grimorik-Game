@@ -29,6 +29,8 @@ class SceneTown : public GameScene
       WorldInfo *world_info;
       float rectCoordX = 0;
       float rectCoordY = 0;
+
+      std::vector<GameObject *> objects;
   //    std::vector<int> objects;
 };
 

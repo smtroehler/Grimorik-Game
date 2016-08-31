@@ -4,7 +4,6 @@
 #include "stdafx.h"
 
 #include <stdlib.h>
-#define _ITERATOR_DEBUG_LEVEL 0
 #include <cstring>
 #include <vector>
 void gameLoop( WorldInfo *world_info)
@@ -21,7 +20,7 @@ void gameLoop( WorldInfo *world_info)
    float prev = 0, cur, dt = 0.0f;
    SceneTown scene1;
    scene1.setup(world_info);
-  // std::vector<int> as;
+   
    while (1) {
       ticks = SDL_GetTicks();
       seconds = (float) ticks / 1000.0f;
@@ -38,7 +37,7 @@ void gameLoop( WorldInfo *world_info)
       SDL_SetRenderDrawColor(world_info->renderer, 0x00, 0x00, 0x00, 0xFF);
       SDL_RenderClear(world_info->renderer);
 
-
+   
       scene1.render(dtsec);
       
    }

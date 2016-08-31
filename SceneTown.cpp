@@ -24,8 +24,8 @@ void SceneTown::setup(WorldInfo *world)
 
    GameObject *temp_bg = new GameObject(0, 0, 0, 1024 , 1024, world_info);
    temp_bg->setImage("materials/test/bg.png");
-   
- //  objects.push_back(temp_bg);
+   objects = std::vector<GameObject *>();
+   objects.push_back(temp_bg);
 }
 
 int SceneTown::processControl(float dt)
@@ -108,10 +108,10 @@ void SceneTown::render(float dt)
    
 
   
-  // for (int i = 0; i < objects.size(); i++)
- //  {
- //     objects.at(i)->render();
- //  }
+   for (int i = 0; i < objects.size(); i++)
+   {
+      objects.at(i)->render();
+   }
    temp_player->render();
    temp_player_static->render();
    

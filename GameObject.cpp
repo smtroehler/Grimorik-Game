@@ -10,7 +10,7 @@ GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
    colorR = 128;
    colorG = 128;
    colorB = 128;
-   colorA = 255;
+   colorA = 0;
 
    width = w;
    height = h;
@@ -34,10 +34,10 @@ void GameObject::setImage(const char* file)
 {
    SDL_Surface *temp;
    temp = IMG_Load(file);
-   SDL_SetColorKey(temp, SDL_TRUE, SDL_MapRGB(temp->format, 0xFF, 0, 0xFF));
+  // SDL_SetColorKey(temp, SDL_TRUE, SDL_MapRGB(temp->format, 0xFF, 0, 0xFF));
    
    bitmapTex = SDL_CreateTextureFromSurface(info_ptr->renderer, temp);
-
+  // temp->setBlendMode(SDL_BLENDMODE_BLEND);
 
    SDL_FreeSurface(temp);
 
@@ -70,7 +70,7 @@ void GameObject::render() {
 
 
    
-
+   
    SDL_SetRenderDrawColor(info_ptr->renderer, colorR, colorG, colorB, colorA);
    SDL_RenderFillRect(info_ptr->renderer, &fillRect);
 
