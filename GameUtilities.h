@@ -26,3 +26,9 @@ struct WorldInfo
    SDL_Window *win;
 };
 #endif
+
+// keep track of completed quests and quest items here
+struct QuestTracker
+{
+
+};

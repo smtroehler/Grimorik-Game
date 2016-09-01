@@ -19,19 +19,27 @@ class GameObject
 
       int getScreenX();
       int getScreenY();
-      int getZ();
+      int getZ() { return worldZ; };
       float getWorldX();
       float getWorldY();
-      int   getWidth();
-      int   getHeight();
+      int   getWidth() { return width; };
+      int   getHeight() { return height; };
+      float getVelX();
+      float getVelY();
+      float getVelZ();
 
       void setImage(const char* file);
       void setColor(int r, int g, int b, int a);
-      void setWorldPos(int x, int y);
+      void setWorldPos(float x, float y);
      
-   private:
+      void setVelocity(float x, float y, float z);
+      
+
+   protected:
       // Keeps track of world coords.
       float worldX, worldY, worldZ;
+      float velX, velY, velZ;
+
       int width, height;
       int colorR, colorG, colorB, colorA;
       BoundingBox bbox;
@@ -43,5 +51,7 @@ class GameObject
       SDL_Texture *bitmapTex = NULL;
       SDL_Rect fillRect;
 };
+
+bool isFirstGameObject(GameObject *t, GameObject *o);
 
 #endif

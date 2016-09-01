@@ -22,12 +22,16 @@ void gameLoop( WorldInfo *world_info)
    scene1.setup(world_info);
    
    while (1) {
+
+      const Uint8* keystate = SDL_GetKeyboardState(NULL);
+
+
+      
       ticks = SDL_GetTicks();
       seconds = (float) ticks / 1000.0f;
       dt = ticks - prev;
       float dtsec = dt / 1000.0f;
       prev = ticks;
-
       
       if (scene1.processControl(dtsec) == -1)
          return;

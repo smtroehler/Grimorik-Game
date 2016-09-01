@@ -1,5 +1,8 @@
 #include "Scenes.h"
+#include "NPC.h"
 #include  <vector>
+#include <algorithm>    // std::sort
+
 SceneTown::SceneTown()
 {
 
@@ -13,20 +16,32 @@ SceneTown::~SceneTown()
 
 void SceneTown::setup(WorldInfo *world)
 {
+
+
    world_info = world;
-   temp_player = new GameObject(0, 0, 0, 80, 80, world_info);
-   temp_player->setImage("materials/test/noct.png");
 
-   temp_player_static = new GameObject(0, 0, 0, 120, 120, world_info);
-   temp_player_static->setImage("materials/test/noct.png");
-
-   
-
-   GameObject *temp_bg = new GameObject(0, 0, 0, 1024 , 1024, world_info);
+   GameObject *temp_bg = new GameObject(0, 0, -3, 1024, 1024, world_info);
    temp_bg->setImage("materials/test/bg.png");
    objects = std::vector<GameObject *>();
    objects.push_back(temp_bg);
+   temp_player = new GameObject(0, 0, 0, 80, 80, world_info);
+   temp_player->setImage("materials/test/noct.png");
+   objects.push_back(temp_player);
+
+   temp_player_static = new GameObject(0, 0, 0, 120, 120, world_info);
+   temp_player_static->setImage("materials/test/noct.png");
+   objects.push_back(temp_player_static);
+   
+
+   
+
+
+   NPC *temp_npc = new NPC(500, 0, 0, 80, 80, world_info);
+   temp_npc->setImage("materials/test/noct.png");
+   objects.push_back(temp_npc);
 }
+
+bool pause = false;
 
 int SceneTown::processControl(float dt)
 {
@@ -44,11 +59,17 @@ int SceneTown::processControl(float dt)
          case SDLK_ESCAPE:
             return -1;
             break;
+         case SDLK_SPACE:
+            pause = !pause;
+            break;
          }
          break;
+      
       }
 
    }
+
+   
 
    const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
@@ -76,11 +97,16 @@ int SceneTown::processControl(float dt)
       playerVel.y = 300;
       isMovingY = true;
    }
+
+
    return 1;
 }
 
 void SceneTown::update(float dt)
 {
+   if (pause == true)
+      return;
+
    if (isMovingX == false)
    {
       playerVel.x += 15 * -playerVel.x * dt;
@@ -99,6 +125,13 @@ void SceneTown::update(float dt)
 
    world_info->cameraPosX = (int)rectCoordX;
    world_info->cameraPosY = (int)rectCoordY;
+
+   std::sort(objects.begin(), objects.end(), isFirstGameObject);
+
+   for (int i = 0; i < objects.size(); i++)
+   {
+      objects.at(i)->update(dt);
+   }
 }
 
 void SceneTown::render(float dt)
@@ -112,8 +145,6 @@ void SceneTown::render(float dt)
    {
       objects.at(i)->render();
    }
-   temp_player->render();
-   temp_player_static->render();
    
    SDL_RenderPresent(world_info->renderer);
 }

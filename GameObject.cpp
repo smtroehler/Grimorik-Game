@@ -1,11 +1,16 @@
 #include "GameObject.h"
 #include "GameUtilities.h"
 #include "SDL_image.h"
+#include <iostream>
 GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
 {
    worldX = x;
    worldY = y;
    worldZ = z;
+
+   velX = 0;
+   velY = 0;
+   velZ = 0;
 
    colorR = 128;
    colorG = 128;
@@ -54,23 +59,50 @@ float GameObject::getWorldY()
    return worldY;
 }
 
-void GameObject::setWorldPos(int x, int y)
+void GameObject::setWorldPos(float x, float y)
 {
    worldX = x;
    worldY = y;
 }
 
+void GameObject::setVelocity(float x, float y, float z)
+{
+   velX = x;
+   velY = y;
+   velZ = z;
+}
 
-void GameObject::update(float dt) {}
+float GameObject::getVelX()
+{
+   return velX;
+}
+float GameObject::getVelY()
+{
+   return velY;
+}
+float GameObject::getVelZ()
+{
+   return velZ;
+}
+
+void GameObject::update(float dt) {
+
+   worldX += velX * dt;
+   worldY += velY * dt;
+   worldZ += velZ * dt;
+
+}
 
 void GameObject::render() {
 
    fillRect.x = (int) worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
-   fillRect.y = (int) worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2;
+   fillRect.y = (int) (worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2);
 
 
    
-   
+   SDL_SetRenderDrawBlendMode(info_ptr->renderer,
+      SDL_BLENDMODE_BLEND);
+
    SDL_SetRenderDrawColor(info_ptr->renderer, colorR, colorG, colorB, colorA);
    SDL_RenderFillRect(info_ptr->renderer, &fillRect);
 
@@ -78,3 +110,11 @@ void GameObject::render() {
       SDL_RenderCopy(info_ptr->renderer, bitmapTex, NULL, &fillRect);
 }
 
+bool isFirstGameObject(GameObject *t, GameObject *o)
+{
+   if (t->getZ() > o->getZ())
+      return false;
+   if (t->getWorldY() > o->getWorldY())
+      return false;
+   return true;
+}
