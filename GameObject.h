@@ -27,13 +27,15 @@ class GameObject
       float getVelX();
       float getVelY();
       float getVelZ();
+      glm::vec3 getVelocity();
+      glm::vec3 getWorldPos();
 
       void setImage(const char* file);
       void setColor(int r, int g, int b, int a);
       void setWorldPos(float x, float y);
      
       void setVelocity(float x, float y, float z);
-      
+      void setVelocity(glm::vec3 in);
 
    protected:
       // Keeps track of world coords.
@@ -53,5 +55,5 @@ class GameObject
 };
 
 bool isFirstGameObject(GameObject *t, GameObject *o);
-
+float distanceOfGO(GameObject *t, GameObject *o);
 #endif

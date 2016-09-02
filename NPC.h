@@ -4,9 +4,10 @@
 class State
 {
 public:
-   State();
+   State() {};
 
-   virtual State update(float dt);
+   virtual State *update(float dt) = 0;
+   virtual void setNextState(State *toSet) = 0;
 };
 
 class NPC : public GameObject
@@ -17,13 +18,17 @@ class NPC : public GameObject
 
       virtual void render();
       virtual void update(float dt);
-
+      virtual void interact();
+      virtual void interactionFinished();
       GameObject *has_quest_symbol;
 
-   private:
-
+   protected:
+      glm::vec3 prevVelocity;
+      bool isInteractionFinished = true;
       bool hasQuest = true; 
       bool canFight = false;
+      State *curState;
+   private:
+     
 };
-
 

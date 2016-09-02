@@ -31,6 +31,11 @@ void gameLoop( WorldInfo *world_info)
       seconds = (float) ticks / 1000.0f;
       dt = ticks - prev;
       float dtsec = dt / 1000.0f;
+      
+      //make sure the time slice isn't huge for whatever reason
+      if (dtsec > .0015)
+         dtsec = .001;
+
       prev = ticks;
       
       if (scene1.processControl(dtsec) == -1)

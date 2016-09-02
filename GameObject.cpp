@@ -72,6 +72,13 @@ void GameObject::setVelocity(float x, float y, float z)
    velZ = z;
 }
 
+void GameObject::setVelocity(glm::vec3 in)
+{
+   velX = in.x;
+   velY = in.y;
+   velZ = in.z;
+}
+
 float GameObject::getVelX()
 {
    return velX;
@@ -83,6 +90,16 @@ float GameObject::getVelY()
 float GameObject::getVelZ()
 {
    return velZ;
+}
+
+glm::vec3 GameObject::getVelocity()
+{
+   return glm::vec3(velX, velY, velZ);
+}
+
+glm::vec3 GameObject::getWorldPos()
+{
+   return glm::vec3(worldX, worldY, worldZ);
 }
 
 void GameObject::update(float dt) {
@@ -114,7 +131,14 @@ bool isFirstGameObject(GameObject *t, GameObject *o)
 {
    if (t->getZ() > o->getZ())
       return false;
-   if (t->getWorldY() > o->getWorldY())
+   if (t->getWorldY() + (t->getHeight() / 2.0f) > o->getWorldY() + (o->getHeight() / 2))
       return false;
    return true;
+}
+
+float distanceOfGO(GameObject *t, GameObject *o)
+{
+   glm::vec3 diff = o->getWorldPos() - t->getWorldPos();
+   std::cout << diff.x << " " << diff.y << " " << diff.z <<  " " << std::abs(diff.length()) << "\n";
+   return std::abs(glm::length(diff));
 }

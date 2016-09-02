@@ -31,11 +31,7 @@ void SceneTown::setup(WorldInfo *world)
    temp_player_static = new GameObject(0, 0, 0, 120, 120, world_info);
    temp_player_static->setImage("materials/test/noct.png");
    objects.push_back(temp_player_static);
-   
-
-   
-
-
+  
    NPC *temp_npc = new NPC(500, 0, 0, 80, 80, world_info);
    temp_npc->setImage("materials/test/noct.png");
    objects.push_back(temp_npc);
@@ -64,7 +60,7 @@ int SceneTown::processControl(float dt)
             break;
          }
          break;
-      
+         
       }
 
    }
@@ -96,6 +92,19 @@ int SceneTown::processControl(float dt)
    {
       playerVel.y = 300;
       isMovingY = true;
+   }
+   if (keystate[SDL_SCANCODE_E])
+   {
+      for (int i = 0; i < objects.size();i++)
+      {
+         NPC *other;
+         if ((other = dynamic_cast<NPC *> (objects.at(i))) != 0)
+         {
+            if (distanceOfGO(other, temp_player) < 100) {
+               other->interact();
+            }
+         }
+      }
    }
 
 
