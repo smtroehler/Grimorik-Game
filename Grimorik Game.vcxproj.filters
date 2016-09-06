@@ -16,6 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="NPC_database.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="materials\fonts\NPC_database.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -67,6 +73,7 @@
     <Library Include="libs\SDL2.lib" />
     <Library Include="libs\SDL2main.lib" />
     <Library Include="libs\SDL2_image.lib" />
+    <Library Include="libs\SDL2_ttf.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2_image.dll" />
@@ -75,5 +82,12 @@
     <None Include="libjpeg-9.dll" />
     <None Include="libpng16-16.dll" />
     <None Include="zlib1.dll" />
+    <None Include="SDL2_ttf.dll" />
+    <None Include="libfreetype-6.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="materials\fonts\KELMSCOT.TTF">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

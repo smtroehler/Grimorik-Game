@@ -2,7 +2,7 @@
 #include "NPC.h"
 #include  <vector>
 #include <algorithm>    // std::sort
-
+#include <iostream>
 SceneTown::SceneTown()
 {
 
@@ -17,6 +17,11 @@ SceneTown::~SceneTown()
 void SceneTown::setup(WorldInfo *world)
 {
 
+   world->dialogueFont = TTF_OpenFont("c:/Windows/Fonts/KELMSCOT.ttf", 24); //this opens a font style and sets a size
+   if (!world->dialogueFont) {
+      printf("TTF_OpenFont: %s\n", TTF_GetError());
+      // handle error
+   }
 
    world_info = world;
 
@@ -28,13 +33,13 @@ void SceneTown::setup(WorldInfo *world)
    temp_player->setImage("materials/test/noct.png");
    objects.push_back(temp_player);
 
-   temp_player_static = new GameObject(0, 0, 0, 120, 120, world_info);
-   temp_player_static->setImage("materials/test/noct.png");
-   objects.push_back(temp_player_static);
   
-   NPC *temp_npc = new NPC(500, 0, 0, 80, 80, world_info);
+   NPC *temp_npc = new NPCTEST(500, 0, 0, 80, 80, world_info);
    temp_npc->setImage("materials/test/noct.png");
    objects.push_back(temp_npc);
+
+   std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
+   objects.insert(objects.end(), npcs.begin(), npcs.end());
 }
 
 bool pause = false;
@@ -143,6 +148,9 @@ void SceneTown::update(float dt)
    }
 }
 
+
+#include <fstream>
+
 void SceneTown::render(float dt)
 {
    
@@ -154,6 +162,11 @@ void SceneTown::render(float dt)
    {
       objects.at(i)->render();
    }
-   
+      
+
+
+
+
+
    SDL_RenderPresent(world_info->renderer);
 }

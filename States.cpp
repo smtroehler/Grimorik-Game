@@ -39,6 +39,9 @@ State* WaitState::update(float dt)
       return this;
    }
    else {
+      if (this->nextState == NULL)
+         std::cout << "something wrong\n";
+      elapsedTime = 0;
       return this->nextState;
    }
 
@@ -63,7 +66,8 @@ State* MoveToState::update(float dt)
 
    if (glm::distance(toMove->getWorldPos(), dest) < 5)
    {
-      std::cout << "here\n";
+      if (this->nextState == NULL)
+         std::cout << "something wrong\n";
       return this->nextState;
    }
 

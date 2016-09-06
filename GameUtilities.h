@@ -6,6 +6,8 @@
 
 #include "SDL.h"
 #include "glm/glm.hpp"
+
+#include "SDL_ttf.h"
 struct BoundingBox {
 
    int x, y;
@@ -24,6 +26,7 @@ struct WorldInfo
    float dt;
    SDL_Renderer *renderer;
    SDL_Window *win;
+   TTF_Font* dialogueFont;
 };
 #endif
 

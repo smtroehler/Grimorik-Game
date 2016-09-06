@@ -14,6 +14,7 @@
 #include <tchar.h>
 #include <iostream>
 #include "SDL.h"
+
 // TODO: reference additional headers your program requires here
 #include "GameObject.h"
 #include "GameUtilities.h"
@@ -22,4 +23,5 @@
 
 #include "SDL_image.h"
 
+#include "SDL_ttf.h"
 #endif

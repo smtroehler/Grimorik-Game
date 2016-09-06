@@ -1,0 +1,16 @@
+NPC
+Gren Ronlor
+materials/test/noct.png
+1000 40 0 80 80
+STATES
+s1 moveto 800 40 0 50
+s2 wait 1
+s3 moveto 800 150 0 50
+s4 wait 1
+ENDSTATES
+DIALOGUE 
+Welcome to the first dialoge^
+Pound signs will indicate new pages^
+requiring user to press a button#
+ENDDIALOGUE
+ENDNPCDEF

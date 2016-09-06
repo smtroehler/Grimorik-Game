@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
    world_info->cameraVelocity = glm::vec3(0, 0, 0);
    world_info->cameraAccel = glm::vec3(0, 0, 0);
    
+   TTF_Init();
    SDL_Init(SDL_INIT_VIDEO);
 
    world_info->win = SDL_CreateWindow("Hello World", posX, posY, width, height, 0);

@@ -139,6 +139,5 @@ bool isFirstGameObject(GameObject *t, GameObject *o)
 float distanceOfGO(GameObject *t, GameObject *o)
 {
    glm::vec3 diff = o->getWorldPos() - t->getWorldPos();
-   std::cout << diff.x << " " << diff.y << " " << diff.z <<  " " << std::abs(diff.length()) << "\n";
    return std::abs(glm::length(diff));
 }

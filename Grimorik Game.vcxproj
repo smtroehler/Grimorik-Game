@@ -146,6 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="materials\fonts\NPC_database.txt" />
+    <Text Include="NPC_database.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -170,14 +172,20 @@
     <Library Include="libs\SDL2.lib" />
     <Library Include="libs\SDL2main.lib" />
     <Library Include="libs\SDL2_image.lib" />
+    <Library Include="libs\SDL2_ttf.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="libfreetype-6.dll" />
     <None Include="libjpeg-9.dll" />
     <None Include="libpng16-16.dll" />
     <None Include="libtiff-5.dll" />
     <None Include="libwebp-4.dll" />
     <None Include="SDL2_image.dll" />
+    <None Include="SDL2_ttf.dll" />
     <None Include="zlib1.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="materials\fonts\KELMSCOT.TTF" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

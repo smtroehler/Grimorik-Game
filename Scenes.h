@@ -8,6 +8,7 @@
 #include "GameScene.h"
 #include <vector>
 
+#include "SDL_ttf.h"
 #include <stdlib.h>
 class SceneTown : public GameScene
 {
@@ -31,6 +32,7 @@ class SceneTown : public GameScene
       float rectCoordY = 0;
 
       std::vector<GameObject *> objects;
+      
   //    std::vector<int> objects;
 };
 
