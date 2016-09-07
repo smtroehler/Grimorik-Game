@@ -151,6 +151,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DialogueBox.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameUtilities.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DialogueBox.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grimorik Game.cpp" />
     <ClCompile Include="NPC.cpp" />

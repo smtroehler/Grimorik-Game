@@ -6,7 +6,7 @@
 
 #include "SDL.h"
 #include "glm/glm.hpp"
-
+#include <string>
 #include "SDL_ttf.h"
 struct BoundingBox {
 
@@ -27,8 +27,12 @@ struct WorldInfo
    SDL_Renderer *renderer;
    SDL_Window *win;
    TTF_Font* dialogueFont;
+   const Uint8* keystates;
+
+
 };
 #endif
+
 
 // keep track of completed quests and quest items here
 struct QuestTracker

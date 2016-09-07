@@ -34,6 +34,8 @@ class NPC : public GameObject
       State *curState;
       std::vector<State *> states;
       std::string name;
+
+      SDL_Texture *talkingSprite = NULL;
    private:
      
 };

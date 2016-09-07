@@ -14,6 +14,8 @@ SceneTown::~SceneTown()
 }
 
 
+DialogueBox *test;
+
 void SceneTown::setup(WorldInfo *world)
 {
 
@@ -40,6 +42,9 @@ void SceneTown::setup(WorldInfo *world)
 
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
    objects.insert(objects.end(), npcs.begin(), npcs.end());
+
+   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "hello tehre");
+   test->setTalkingSprite("materials/test/noct.png");
 }
 
 bool pause = false;
@@ -72,33 +77,33 @@ int SceneTown::processControl(float dt)
 
    
 
-   const Uint8* keystate = SDL_GetKeyboardState(NULL);
+   world_info->keystates = SDL_GetKeyboardState(NULL);
 
    isMovingX = false;
    isMovingY = false;
 
    //continuous-response keys SEND INPUT TO PLAYER CLASS TO HANDLE MOVEMENT
-   if (keystate[SDL_SCANCODE_A])
+   if (world_info->keystates[SDL_SCANCODE_A])
    {
       playerVel.x = -300;
       isMovingX = true;
    }
-   if (keystate[SDL_SCANCODE_D])
+   if (world_info->keystates[SDL_SCANCODE_D])
    {
       playerVel.x = 300;
       isMovingX = true;
    }
-   if (keystate[SDL_SCANCODE_W])
+   if (world_info->keystates[SDL_SCANCODE_W])
    {
       playerVel.y = -300;
       isMovingY = true;
    }
-   if (keystate[SDL_SCANCODE_S])
+   if (world_info->keystates[SDL_SCANCODE_S])
    {
       playerVel.y = 300;
       isMovingY = true;
    }
-   if (keystate[SDL_SCANCODE_E])
+   if (world_info->keystates[SDL_SCANCODE_E])
    {
       for (int i = 0; i < objects.size();i++)
       {
@@ -165,7 +170,7 @@ void SceneTown::render(float dt)
       
 
 
-
+   test->render();
 
 
    SDL_RenderPresent(world_info->renderer);

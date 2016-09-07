@@ -10,6 +10,7 @@
 
 #include "SDL_ttf.h"
 #include <stdlib.h>
+#include "DialogueBox.h"
 class SceneTown : public GameScene
 {
    public:
