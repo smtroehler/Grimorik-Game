@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include <vector>
+#include "DialogueBox.h"
 class State
 {
 public:
@@ -57,9 +58,12 @@ public:
 protected:
    glm::vec3 prevVelocity;
    bool isInteractionFinished = true;
+   bool interactionBegun = false;
    bool hasQuest = true;
    bool canFight = false;
    State *curState;
+   DialogueBox *test;
+   DialogueScene *testscene;
 private:
 
 };

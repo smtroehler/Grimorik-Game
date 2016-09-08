@@ -95,12 +95,37 @@ NPCTEST::NPCTEST(int x, int y, int z, int w, int h, WorldInfo *info) :
    states.at(3)->setNextState(states.at(0));
 
    name = "I have no name";
+
+
+
+   testscene = new DialogueScene(info);
+   test = new DialogueBox(info, glm::vec3(0, 0, 0), "hello tehre testing new lines");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("this is on a new line");
+
+   testscene->addDialogueBox(test);
+
+   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is a test of multiple dialogs");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("character is aligned on the other side");
+   test->alignLeft();
+
+   testscene->addDialogueBox(test);
+
+   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is a third test");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("here we will test a third line");
+   test->addLineOfText("here is the third line");
+   test->alignRight();
+
+   testscene->addDialogueBox(test);
 }
 
 void NPCTEST::render()
 {
    if (hasQuest)
       has_quest_symbol->render();
+
 
    CollideableObject::render();
 }
@@ -128,8 +153,17 @@ void NPCTEST::update(float dt)
       has_quest_symbol->update(dt);
    }
 
-   curState = curState->update(dt);
    
+   if (interactionBegun && isInteractionFinished == false)
+   {
+      if (info_ptr->cur_dialogue->dialogueIsFinished())
+         interactionFinished();
+      setVelocity(0, 0, 0);
+   }
+   else
+   {
+      curState = curState->update(dt);
+   }
 
    CollideableObject::update(dt);
 }
@@ -139,12 +173,16 @@ void NPCTEST::interact() {
    if (isInteractionFinished == false)
       return;
 
-   prevVelocity = getVelocity();
-   isInteractionFinished = false;
-   setVelocity(0, 0, 0);
-   std::cout << name << ": I have a quest for you!\n";
-   hasQuest = false;
-
+   if (interactionBegun == false)
+   {
+      prevVelocity = getVelocity();
+      isInteractionFinished = false;
+      setVelocity(0, 0, 0);
+      info_ptr->cur_dialogue = testscene;
+      std::cout << name << ": I have a quest for you!\n";
+      hasQuest = false;
+      interactionBegun = true;
+   }
 
 
 }
@@ -153,6 +191,7 @@ void NPCTEST::interactionFinished() {
 
    setVelocity(prevVelocity);
    isInteractionFinished = true;
+   info_ptr->cur_dialogue = NULL;
 }
 
 std::vector<State *> createStates(std::ifstream& fin, WorldInfo *info, NPC *tobind)

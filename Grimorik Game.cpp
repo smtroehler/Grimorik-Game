@@ -57,12 +57,12 @@ void gameLoop( WorldInfo *world_info)
 int main(int argc, char* argv[])
 {
    WorldInfo *world_info = new WorldInfo;
-   int posX = 100, posY = 100, width = 800, height = 600;
+   int posX = 100, posY = 100, width = 1200, height = 900;
 
    world_info->cameraPosX = 0;
    world_info->cameraPosY = 0;
-   world_info->screenWidth = 800;
-   world_info->screenHeight = 600;
+   world_info->screenWidth = 1200;
+   world_info->screenHeight = 900;
    world_info->cameraVelocity = glm::vec3(0, 0, 0);
    world_info->cameraAccel = glm::vec3(0, 0, 0);
    

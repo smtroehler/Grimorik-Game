@@ -208,8 +208,15 @@ void CollideableObject::update(float dt)
          }
          else
          {
-            if(d1x > d2x)
-            std::cout << "collision\n";
+            if (d2x > -3 && velX < 0)
+               velX = 0;
+            if (d1x  > -3 && velX > 0)
+               velX = 0;
+            if (d2y > -3 && velY < 0)
+               velY = 0;
+            if (d1y  > -3 && velY > 0)
+               velY = 0;
+
          }
       }
    }

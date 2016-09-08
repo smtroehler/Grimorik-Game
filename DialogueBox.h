@@ -28,6 +28,8 @@ class DialogueBox : public GameObject
       void alignRight();
       void alignLeft();
 
+      
+
    private:
       bool alignedRight;
 
@@ -57,15 +59,16 @@ public:
    DialogueScene(WorldInfo *world);
    void addDialogueBox(DialogueBox *toAdd);
    void addResponseBox(DialogueBox *toAdd);
-
+   bool dialogueIsFinished();
    int update(float dt);
-
+   
    // returns the box that needs to be currently rendered
    DialogueBox *toRender();
 private:
    int curBox = 0;
    WorldInfo *info;
    std::vector<DialogueBox *> boxes;
+   DialogueScene *nextScene;
    float timer;
 };
 

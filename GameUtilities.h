@@ -9,10 +9,10 @@
 #include <string>
 #include "SDL_ttf.h"
 #include <vector>
-//#include "GameObject.h"
-
+//#include "GameObject.h
 
 extern class CollideableObject;
+extern class DialogueScene;
 
 struct BoundingBox {
 
@@ -37,6 +37,7 @@ struct WorldInfo
    const Uint8* keystates;
 
    std::vector<CollideableObject *> collideables;
+   DialogueScene *cur_dialogue;
 
 };
 #endif

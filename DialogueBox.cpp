@@ -140,6 +140,12 @@ void DialogueScene::addResponseBox(DialogueBox *toAdd)
    boxes.push_back(toAdd);
 }
 
+bool DialogueScene::dialogueIsFinished()
+{
+   if (curBox >= boxes.size())
+      return true;
+   return false;
+}
 
 
 int DialogueScene::update(float dt)

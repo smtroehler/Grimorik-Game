@@ -14,8 +14,7 @@ SceneTown::~SceneTown()
 }
 
 
-DialogueBox *test;
-DialogueScene *testscene;
+
 void SceneTown::setup(WorldInfo *world)
 {
 
@@ -31,7 +30,7 @@ void SceneTown::setup(WorldInfo *world)
    temp_bg->setImage("materials/test/bg.png");
    objects = std::vector<GameObject *>();
    objects.push_back(temp_bg);
-   temp_player = new CollideableObject(0, 0, 0, 80, 80, world_info);
+   temp_player = new PlayerObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.png");
    objects.push_back(temp_player);
 
@@ -45,30 +44,10 @@ void SceneTown::setup(WorldInfo *world)
 
    world_info->collideables.push_back(temp_npc);
    world_info->collideables.push_back(temp_player);
+   world_info->collideables.insert(world_info->collideables.end(), npcs.begin(), npcs.end());
 
-
-
-   testscene = new DialogueScene(world_info);
-   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "hello tehre testing new lines");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("this is on a new line");
+   world_info->cur_dialogue = NULL;
    
-   testscene->addDialogueBox(test);
-
-   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "this is a test of multiple dialogs");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("character is aligned on the other side");
-   test->alignLeft();
-
-   testscene->addDialogueBox(test);
-
-   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "this is a third test");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("here we will test a third line");
-   test->addLineOfText("here is the third line");
-   test->alignRight();
-
-   testscene->addDialogueBox(test);
    
 }
 
@@ -95,39 +74,15 @@ int SceneTown::processControl(float dt)
             break;
          }
          break;
-         
-      }
 
+      }
    }
 
    
 
    world_info->keystates = SDL_GetKeyboardState(NULL);
-
-   isMovingX = false;
-   isMovingY = false;
-
+   
    //continuous-response keys SEND INPUT TO PLAYER CLASS TO HANDLE MOVEMENT
-   if (world_info->keystates[SDL_SCANCODE_A])
-   {
-      playerVel.x = -300;
-      isMovingX = true;
-   }
-   if (world_info->keystates[SDL_SCANCODE_D])
-   {
-      playerVel.x = 300;
-      isMovingX = true;
-   }
-   if (world_info->keystates[SDL_SCANCODE_W])
-   {
-      playerVel.y = -300;
-      isMovingY = true;
-   }
-   if (world_info->keystates[SDL_SCANCODE_S])
-   {
-      playerVel.y = 300;
-      isMovingY = true;
-   }
    if (world_info->keystates[SDL_SCANCODE_E])
    {
       for (int i = 0; i < objects.size();i++)
@@ -148,28 +103,21 @@ int SceneTown::processControl(float dt)
 
 void SceneTown::update(float dt)
 {
-   testscene->update(dt);
+   if (world_info->cur_dialogue != NULL)
+   {
+      world_info->cur_dialogue->update(dt);
+
+   }
+  
    if (pause == true)
       return;
 
-   if (isMovingX == false)
-   {
-      playerVel.x += 15 * -playerVel.x * dt;
-   }
-
-   if (isMovingY == false)
-   {
-      playerVel.y += 15 * -playerVel.y * dt;
-   }
+  
    rectCoordX += playerVel.x * dt;
    rectCoordY += playerVel.y * dt;
 
-   temp_player->setWorldPos((int)rectCoordX, (int)rectCoordY);
-
-   glm::vec2 dif = glm::vec2(rectCoordX - world_info->cameraPosX, rectCoordY - world_info->cameraPosY);
-
-   world_info->cameraPosX = (int)rectCoordX;
-   world_info->cameraPosY = (int)rectCoordY;
+   world_info->cameraPosX = (int)temp_player->getWorldX();
+   world_info->cameraPosY = (int)temp_player->getWorldY();
 
    std::sort(objects.begin(), objects.end(), isFirstGameObject);
 
@@ -196,8 +144,8 @@ void SceneTown::render(float dt)
       
 
 
-   if(testscene->toRender() != NULL)
-      testscene->toRender()->render();
+   if(world_info->cur_dialogue != NULL && world_info->cur_dialogue->toRender() != NULL)
+      world_info->cur_dialogue->toRender()->render();
 
 
    SDL_RenderPresent(world_info->renderer);

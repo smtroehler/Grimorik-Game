@@ -11,6 +11,7 @@
 #include "SDL_ttf.h"
 #include <stdlib.h>
 #include "DialogueBox.h"
+#include "PlayerObject.h"
 class SceneTown : public GameScene
 {
    public:
@@ -22,7 +23,7 @@ class SceneTown : public GameScene
       virtual void render(float dt);
 
    private:
-      CollideableObject *temp_player;
+      PlayerObject *temp_player;
       GameObject *temp_player_static;
       glm::vec2 playerVel = glm::vec2(0, 0);
       bool isMovingX = false;
@@ -33,6 +34,8 @@ class SceneTown : public GameScene
       float rectCoordY = 0;
 
       std::vector<GameObject *> objects;
+      
+
       
   //    std::vector<int> objects;
 };
