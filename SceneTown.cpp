@@ -31,7 +31,7 @@ void SceneTown::setup(WorldInfo *world)
    temp_bg->setImage("materials/test/bg.png");
    objects = std::vector<GameObject *>();
    objects.push_back(temp_bg);
-   temp_player = new GameObject(0, 0, 0, 80, 80, world_info);
+   temp_player = new CollideableObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.png");
    objects.push_back(temp_player);
 
@@ -42,6 +42,11 @@ void SceneTown::setup(WorldInfo *world)
 
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
    objects.insert(objects.end(), npcs.begin(), npcs.end());
+
+   world_info->collideables.push_back(temp_npc);
+   world_info->collideables.push_back(temp_player);
+
+
 
    testscene = new DialogueScene(world_info);
    test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "hello tehre testing new lines");

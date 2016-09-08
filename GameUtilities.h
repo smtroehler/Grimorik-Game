@@ -8,10 +8,17 @@
 #include "glm/glm.hpp"
 #include <string>
 #include "SDL_ttf.h"
+#include <vector>
+//#include "GameObject.h"
+
+
+extern class CollideableObject;
+
 struct BoundingBox {
 
    int x, y;
    int w, h;
+
 };
 
 struct WorldInfo
@@ -29,6 +36,7 @@ struct WorldInfo
    TTF_Font* dialogueFont;
    const Uint8* keystates;
 
+   std::vector<CollideableObject *> collideables;
 
 };
 #endif

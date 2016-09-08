@@ -10,7 +10,7 @@ public:
    virtual void setNextState(State *toSet) = 0;
 };
 
-class NPC : public GameObject
+class NPC : public CollideableObject
 {
    public:
       NPC(int x, int y, int z, int w, int h, WorldInfo *info);

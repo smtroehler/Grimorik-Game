@@ -7,7 +7,7 @@
 #include "SDL_ttf.h"
 #include <sstream>
 NPC::NPC(int x, int y, int z, int w, int h, WorldInfo *info) :
-   GameObject(x, y, z, w, h, info)
+   CollideableObject(x, y, z, w, h, info)
 {
    has_quest_symbol = new GameObject(x, y - (h / 2) - 35, 0, 40, 40, info);
    has_quest_symbol->setImage("materials/interaction/exclemation.png");
@@ -20,7 +20,7 @@ void NPC::render()
    if (hasQuest)
       has_quest_symbol->render();
 
-   GameObject::render();
+   CollideableObject::render();
 }
 
 void  NPC::update(float dt)
@@ -51,7 +51,7 @@ void  NPC::update(float dt)
 
 
 
-   GameObject::update(dt);
+   CollideableObject::update(dt);
 }
 
 void NPC::interact()
@@ -102,7 +102,7 @@ void NPCTEST::render()
    if (hasQuest)
       has_quest_symbol->render();
 
-   GameObject::render();
+   CollideableObject::render();
 }
 
 void NPCTEST::update(float dt)
@@ -131,7 +131,7 @@ void NPCTEST::update(float dt)
    curState = curState->update(dt);
    
 
-   GameObject::update(dt);
+   CollideableObject::update(dt);
 }
 
 

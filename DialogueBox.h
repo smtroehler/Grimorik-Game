@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+
+extern WorldInfo;
 class DialogueBox : public GameObject
 {
    public:

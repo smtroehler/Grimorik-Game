@@ -22,7 +22,7 @@ class SceneTown : public GameScene
       virtual void render(float dt);
 
    private:
-      GameObject *temp_player;
+      CollideableObject *temp_player;
       GameObject *temp_player_static;
       glm::vec2 playerVel = glm::vec2(0, 0);
       bool isMovingX = false;

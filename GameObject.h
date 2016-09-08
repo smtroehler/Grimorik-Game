@@ -7,6 +7,12 @@
 #include "GameUtilities.h"
 
 #include "SDL_image.h"
+
+//struct WorldInfo; 
+//extern WorldInfo info;
+
+
+
 class GameObject
 {
    public:
@@ -44,7 +50,7 @@ class GameObject
 
       int width, height;
       int colorR, colorG, colorB, colorA;
-      BoundingBox *bbox;
+      
 
       bool isParallaxed = false;
 
@@ -52,6 +58,19 @@ class GameObject
 
       SDL_Texture *bitmapTex = NULL;
       SDL_Rect fillRect;
+};
+
+class CollideableObject : public GameObject
+{
+public:
+   CollideableObject(int x, int y, int z, int w, int h, WorldInfo *info);
+   BoundingBox *bbox;
+
+   void setImage(const char* file);
+   virtual void render();
+   virtual void update(float dt);
+   void setWorldPos(float x, float y);
+   BoundingBox *getBBox() { return bbox; };
 };
 
 bool isFirstGameObject(GameObject *t, GameObject *o);

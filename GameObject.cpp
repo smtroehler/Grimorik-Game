@@ -23,6 +23,7 @@ GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
 
    info_ptr = info;
    fillRect = {x, y, w, h };
+
 }
 
 GameObject::~GameObject() {}
@@ -161,4 +162,75 @@ float distanceOfGO(GameObject *t, GameObject *o)
 {
    glm::vec3 diff = o->getWorldPos() - t->getWorldPos();
    return std::abs(glm::length(diff));
+}
+
+CollideableObject::CollideableObject(int x, int y, int z, int w, int h, WorldInfo *info) : 
+   GameObject(x, y, z, w, h, info)
+{
+
+   bbox = new BoundingBox();
+   bbox->x = x;
+   bbox->y = y;
+   bbox->w = h;
+   bbox->w = h;
+}
+
+void CollideableObject::render()
+{
+   GameObject::render();
+}
+void CollideableObject::update(float dt)
+{
+   bbox->x = worldX;
+   bbox->y = worldY;
+
+   for (int i = 0; i < info_ptr->collideables.size(); i++)
+   {
+      if (info_ptr->collideables.at(i) != this)
+      {
+        
+         BoundingBox *bbox2 = info_ptr->collideables.at(i)->getBBox();
+         float d1x = bbox2->x - bbox->x - bbox->w / 2;
+         float d1y = bbox2->y - bbox->y - bbox->h ;
+         float d2x = bbox->x - bbox2->x - bbox2->w / 2;
+         float d2y = bbox->y - bbox2->y - bbox2->h ;
+
+         float smallest = d1x;
+
+      //   std::cout << d1x << " " << d1x << " " << d2x << " " << d2y << "\n";
+         if (d1x > 0.0f || d1y > 0.0f)
+         {
+
+         }
+         else if (d2x > 0.0f || d2y > 0.0f)
+         {
+
+         }
+         else
+         {
+            if(d1x > d2x)
+            std::cout << "collision\n";
+         }
+      }
+   }
+
+   GameObject::update(dt);
+
+   bbox->x = worldX;
+   bbox->y = worldY;
+}
+void CollideableObject::setWorldPos(float x, float y)
+{
+   GameObject::setWorldPos(x, y);
+   bbox->x = x;
+   bbox->y = y;
+}
+
+void CollideableObject::setImage(const char* file)
+{
+   GameObject::setImage(file);
+   bbox->x = worldX;
+   bbox->y = worldY;
+   bbox->w = width;
+   bbox->h = height;
 }
