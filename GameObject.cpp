@@ -2,6 +2,7 @@
 #include "GameUtilities.h"
 #include "SDL_image.h"
 #include <iostream>
+
 GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
 {
    worldX = x;
@@ -35,18 +36,38 @@ int GameObject::getScreenY()
    return (int) worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 ;
 }
 
+glm::vec2 normalizeImage(SDL_Surface *temp, int width , int height)
+{
+   float imgw, imgh, biggest, db1, scale;
+
+   db1 = width;
+   if (height > db1)
+      db1 = height;
+
+   imgw = temp->w;
+   imgh = temp->h;
+   if (imgh > imgw) {
+      scale = imgh / db1;
+   }
+   else
+   {
+      scale = imgw / db1;
+   }
+   width = imgw / scale;
+   height = imgh / scale;
+   return glm::vec2(width, height);
+}
+
 void GameObject::setImage(const char* file)
 {
    SDL_Surface *temp;
    temp = IMG_Load(file);
-  // SDL_SetColorKey(temp, SDL_TRUE, SDL_MapRGB(temp->format, 0xFF, 0, 0xFF));
-   
+
+   glm::vec2 normedImage = normalizeImage(temp, width, height);
+   fillRect = { (int)worldX,  (int)worldY,  (int)normedImage.x, (int)normedImage.y };
    bitmapTex = SDL_CreateTextureFromSurface(info_ptr->renderer, temp);
-  // temp->setBlendMode(SDL_BLENDMODE_BLEND);
 
    SDL_FreeSurface(temp);
-
-  
 }
 
 float GameObject::getWorldX()

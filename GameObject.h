@@ -44,7 +44,7 @@ class GameObject
 
       int width, height;
       int colorR, colorG, colorB, colorA;
-      BoundingBox bbox;
+      BoundingBox *bbox;
 
       bool isParallaxed = false;
 

@@ -15,7 +15,7 @@ SceneTown::~SceneTown()
 
 
 DialogueBox *test;
-
+DialogueScene *testscene;
 void SceneTown::setup(WorldInfo *world)
 {
 
@@ -43,8 +43,28 @@ void SceneTown::setup(WorldInfo *world)
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
    objects.insert(objects.end(), npcs.begin(), npcs.end());
 
-   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "hello tehre");
+   testscene = new DialogueScene(world_info);
+   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "hello tehre testing new lines");
    test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("this is on a new line");
+   
+   testscene->addDialogueBox(test);
+
+   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "this is a test of multiple dialogs");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("character is aligned on the other side");
+   test->alignLeft();
+
+   testscene->addDialogueBox(test);
+
+   test = new DialogueBox(world_info, glm::vec3(0, 0, 0), "this is a third test");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("here we will test a third line");
+   test->addLineOfText("here is the third line");
+   test->alignRight();
+
+   testscene->addDialogueBox(test);
+   
 }
 
 bool pause = false;
@@ -123,6 +143,7 @@ int SceneTown::processControl(float dt)
 
 void SceneTown::update(float dt)
 {
+   testscene->update(dt);
    if (pause == true)
       return;
 
@@ -170,7 +191,8 @@ void SceneTown::render(float dt)
       
 
 
-   test->render();
+   if(testscene->toRender() != NULL)
+      testscene->toRender()->render();
 
 
    SDL_RenderPresent(world_info->renderer);

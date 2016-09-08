@@ -6,26 +6,35 @@
 
 #include "glm/glm.hpp"
 #include "GameUtilities.h"
-
+#include "GameObject.h"
 #include "SDL.h"
 #include "SDL_image.h"
 #include <string>
+#include <vector>
 
-
-class DialogueBox
+class DialogueBox : public GameObject
 {
    public:
       DialogueBox(WorldInfo *info, glm::vec3 pos, std::string t);
       void setPosition(glm::vec3 in);
-      void setText(std::string in);
+      void setText(std::string in, int i);
       void setTextColor(glm::vec3 in);
       void setTextColor(int r, int g,int b);
       void setTalkingSprite(std::string filename);
-      void render();
+      void addLineOfText(std::string in);
+      virtual void render();
+      void alignRight();
+      void alignLeft();
+
    private:
-      std::string text;
+      bool alignedRight;
+
+      std::vector<std::string> textlines;
       WorldInfo *info;
       SDL_Color fontColor;
+
+      TTF_Font* font;
+
       SDL_Texture *talkingSprite = NULL;
       SDL_Rect talkingSpriteRect;
       glm::vec2 talkingSpriteSize;
@@ -33,11 +42,29 @@ class DialogueBox
       SDL_Texture *textBoxSprite = NULL;
       SDL_Rect textBoxRect;
 
-      SDL_Texture *textTexture = NULL;
+      std::vector<SDL_Texture *> textTexture;
       SDL_Rect textRect;
-      SDL_Surface* textSurface;
+      std::vector<SDL_Surface*> textSurface;
 
       SDL_Rect screenCoverRect;
+};
+
+class DialogueScene
+{
+public:
+   DialogueScene(WorldInfo *world);
+   void addDialogueBox(DialogueBox *toAdd);
+   void addResponseBox(DialogueBox *toAdd);
+
+   int update(float dt);
+
+   // returns the box that needs to be currently rendered
+   DialogueBox *toRender();
+private:
+   int curBox = 0;
+   WorldInfo *info;
+   std::vector<DialogueBox *> boxes;
+   float timer;
 };
 
 #endif
