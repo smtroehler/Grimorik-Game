@@ -6,6 +6,7 @@
 #include <string>
 #include "SDL_ttf.h"
 #include <sstream>
+#include "PlayerObject.h"
 NPC::NPC(int x, int y, int z, int w, int h, WorldInfo *info) :
    CollideableObject(x, y, z, w, h, info)
 {
@@ -13,6 +14,7 @@ NPC::NPC(int x, int y, int z, int w, int h, WorldInfo *info) :
    has_quest_symbol->setImage("materials/interaction/exclemation.png");
    has_quest_symbol->setVelocity(0, 50, 0);
    curState = NULL;
+   last_spoken_to = 0;
 }
 
 void NPC::render()
@@ -119,6 +121,14 @@ NPCTEST::NPCTEST(int x, int y, int z, int w, int h, WorldInfo *info) :
    test->alignRight();
 
    testscene->addDialogueBox(test);
+
+   secondscene = new DialogueScene(info);
+   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is to test scenes going into another scene");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->addLineOfText("character is aligned on the other side");
+   test->alignLeft();
+   secondscene->addDialogueBox(test);
+   testscene->setNextScene(secondscene);
 }
 
 void NPCTEST::render()
@@ -156,9 +166,10 @@ void NPCTEST::update(float dt)
    
    if (interactionBegun && isInteractionFinished == false)
    {
-      if (info_ptr->cur_dialogue->dialogueIsFinished())
+      if (testscene->dialogueIsFinished())
          interactionFinished();
       setVelocity(0, 0, 0);
+      testscene->update(dt);
    }
    else
    {
@@ -173,25 +184,29 @@ void NPCTEST::interact() {
    if (isInteractionFinished == false)
       return;
 
-   if (interactionBegun == false)
+   if (interactionBegun == false && ((SDL_GetTicks() - last_spoken_to) / 1000.0f) > 0.5)
    {
-      prevVelocity = getVelocity();
       isInteractionFinished = false;
       setVelocity(0, 0, 0);
-      info_ptr->cur_dialogue = testscene;
-      std::cout << name << ": I have a quest for you!\n";
       hasQuest = false;
       interactionBegun = true;
+      testscene->start();
+      info_ptr->player->setIsInteracting(true);
+      isInteracting = true;
    }
 
 
 }
 
 void NPCTEST::interactionFinished() {
-
-   setVelocity(prevVelocity);
+   testscene = testscene->getNextScene();
+   last_spoken_to = SDL_GetTicks();
    isInteractionFinished = true;
-   info_ptr->cur_dialogue = NULL;
+   info_ptr->player->setIsInteracting(false);
+   interactionBegun = false;
+   isInteracting = false;
+  // info_ptr->cur_dialogue = NULL;
+  // info_ptr->cur_dialogue->removeFromDrawList();
 }
 
 std::vector<State *> createStates(std::ifstream& fin, WorldInfo *info, NPC *tobind)

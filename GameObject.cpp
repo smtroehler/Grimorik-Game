@@ -24,6 +24,8 @@ GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
    info_ptr = info;
    fillRect = {x, y, w, h };
 
+   isInList = false;
+   isInteracting = false;
 }
 
 GameObject::~GameObject() {}
@@ -149,6 +151,30 @@ void GameObject::render() {
       SDL_RenderCopy(info_ptr->renderer, bitmapTex, NULL, &fillRect);
 }
 
+void GameObject::addToDrawList()
+{
+   if (isInList == true)
+      return;
+
+   info_ptr->objects.push_back(this);
+   isInList = true;
+}
+
+void GameObject::removeFromDrawList()
+{
+   if (isInList == false)
+      return;
+
+   for (int i = 0; i < info_ptr->objects.size(); i++)
+   {
+      if (info_ptr->objects.at(i) == this)
+      {
+         info_ptr->objects.erase(info_ptr->objects.begin() + i);
+      }
+   }
+   isInList = false;
+}
+
 bool isFirstGameObject(GameObject *t, GameObject *o)
 {
    if (t->getZ() > o->getZ())
@@ -240,4 +266,14 @@ void CollideableObject::setImage(const char* file)
    bbox->y = worldY;
    bbox->w = width;
    bbox->h = height;
+}
+
+void CollideableObject::addToDrawList()
+{
+   GameObject::addToDrawList();
+}
+
+void CollideableObject::removeFromDrawList()
+{
+   GameObject::removeFromDrawList();
 }

@@ -43,6 +43,14 @@ class GameObject
       void setVelocity(float x, float y, float z);
       void setVelocity(glm::vec3 in);
 
+      virtual void addToDrawList();
+      virtual void removeFromDrawList();
+      
+      void setIsInteracting(bool in) { isInteracting = in; };
+
+      bool isInteracting;
+
+      bool isInList;
    protected:
       // Keeps track of world coords.
       float worldX, worldY, worldZ;
@@ -71,6 +79,9 @@ public:
    virtual void update(float dt);
    void setWorldPos(float x, float y);
    BoundingBox *getBBox() { return bbox; };
+
+   virtual void addToDrawList();
+   virtual void removeFromDrawList();
 };
 
 bool isFirstGameObject(GameObject *t, GameObject *o);

@@ -22,21 +22,26 @@ class NPC : public CollideableObject
       virtual void interact();
       virtual void interactionFinished();
       virtual void setStates(std::vector <State *> in);
-      GameObject *has_quest_symbol;
+
 
       std::string getName() { return name; };
       void setName(std::string in) { name = in; };
 
    protected:
-      glm::vec3 prevVelocity;
       bool isInteractionFinished = true;
       bool hasQuest = true; 
       bool canFight = false;
+
       State *curState;
+
       std::vector<State *> states;
       std::string name;
 
+      float last_spoken_to;
+
       SDL_Texture *talkingSprite = NULL;
+
+      GameObject *has_quest_symbol;
    private:
      
 };
@@ -64,6 +69,7 @@ protected:
    State *curState;
    DialogueBox *test;
    DialogueScene *testscene;
+   DialogueScene *secondscene;
 private:
 
 };

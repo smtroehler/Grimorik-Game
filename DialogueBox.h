@@ -28,7 +28,8 @@ class DialogueBox : public GameObject
       void alignRight();
       void alignLeft();
 
-      
+      virtual void addToDrawList();
+      virtual void removeFromDrawList();
 
    private:
       bool alignedRight;
@@ -59,11 +60,15 @@ public:
    DialogueScene(WorldInfo *world);
    void addDialogueBox(DialogueBox *toAdd);
    void addResponseBox(DialogueBox *toAdd);
+   // If there is no next scene set then return itself so this dialog will repeat
+   DialogueScene *getNextScene() { if (nextScene) return nextScene; else return this; };
+   void setNextScene(DialogueScene *in) { nextScene = in; };
    bool dialogueIsFinished();
    int update(float dt);
    
    // returns the box that needs to be currently rendered
    DialogueBox *toRender();
+   void start();
 private:
    int curBox = 0;
    WorldInfo *info;
@@ -71,5 +76,11 @@ private:
    DialogueScene *nextScene;
    float timer;
 };
+
+class DialogueBoxResponse : public DialogueBox
+{
+
+};
+
 
 #endif

@@ -2,7 +2,7 @@
 
 PlayerObject::PlayerObject(int x, int y, int z, int w, int h, WorldInfo *info) :
    CollideableObject(x, y, z, w, h, info) {
-
+   isInteracting = false;
 }
 
 void PlayerObject::render()
@@ -43,6 +43,9 @@ void PlayerObject::update(float dt)
    {
       velY += 15.0f * -velY * dt;
    }
+
+   if (isInteracting)
+      velX = velY = 0;
 
    CollideableObject::update(dt);
 }

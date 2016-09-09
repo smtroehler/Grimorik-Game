@@ -8,7 +8,7 @@ std::string dialogueFont = "materials/fonts/KELMSCOT.ttf";
 
 
 
-DialogueBox::DialogueBox(WorldInfo *worldinfo, glm::vec3 pos, std::string t) : GameObject(0,0,0,0,0,worldinfo) {
+DialogueBox::DialogueBox(WorldInfo *worldinfo, glm::vec3 pos, std::string t) : GameObject(0,0,0,0,-10,worldinfo) {
    info = worldinfo;
    textlines.push_back(t);
 
@@ -125,9 +125,19 @@ void DialogueBox::render()
    }
 }
 
+void DialogueBox::addToDrawList()
+{
+   GameObject::addToDrawList();
+}
+void DialogueBox::removeFromDrawList()
+{
+   GameObject::removeFromDrawList();
+}
+
 DialogueScene::DialogueScene(WorldInfo *world)
 {
    info = world;
+   nextScene = NULL;
 }
 
 void DialogueScene::addDialogueBox(DialogueBox *toAdd)
@@ -154,15 +164,33 @@ int DialogueScene::update(float dt)
 
    if (info->keystates[SDL_SCANCODE_E])
    {
+      
       if (timer > 1)
       {
-         curBox++;
          if (curBox >= boxes.size())
             return -1;
+
+         boxes.at(curBox)->removeFromDrawList();
+         curBox++;
+
+         if (curBox >= boxes.size()) {
+            return -1;
+         }
+         boxes.at(curBox)->addToDrawList();
          timer = 0;
+         
       }
    }
 }
+
+void DialogueScene::start()
+{
+   curBox = 0;
+   timer = 0;
+   boxes.at(curBox)->addToDrawList();
+}
+
+
 
 // returns the box that needs to be currently rendered
 DialogueBox *DialogueScene::toRender()

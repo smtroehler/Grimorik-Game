@@ -11,9 +11,12 @@
 #include <vector>
 //#include "GameObject.h
 
-extern class CollideableObject;
-extern class DialogueScene;
 
+
+extern class CollideableObject;
+extern class GameObject;
+extern class DialogueScene;
+extern class PlayerObject;
 struct BoundingBox {
 
    int x, y;
@@ -37,8 +40,8 @@ struct WorldInfo
    const Uint8* keystates;
 
    std::vector<CollideableObject *> collideables;
-   DialogueScene *cur_dialogue;
-
+   std::vector<GameObject *> objects;
+   PlayerObject *player;
 };
 #endif
 

@@ -28,27 +28,30 @@ void SceneTown::setup(WorldInfo *world)
 
    GameObject *temp_bg = new GameObject(0, 0, -3, 1024, 1024, world_info);
    temp_bg->setImage("materials/test/bg.png");
-   objects = std::vector<GameObject *>();
-   objects.push_back(temp_bg);
+   world_info->objects = std::vector<GameObject *>();
+   temp_bg->addToDrawList();;
+
    temp_player = new PlayerObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.png");
-   objects.push_back(temp_player);
-
+   temp_player->addToDrawList();
+   world_info->player = temp_player;
   
    NPC *temp_npc = new NPCTEST(500, 0, 0, 80, 80, world_info);
    temp_npc->setImage("materials/test/noct.png");
-   objects.push_back(temp_npc);
+   temp_npc->addToDrawList();
+   
 
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
-   objects.insert(objects.end(), npcs.begin(), npcs.end());
+   for (int i = 0; i < npcs.size(); i++)
+   {
+      npcs.at(i)->addToDrawList();
+   }
+
+  // world_info->objects.insert(world_info->objects.end(), npcs.begin(), npcs.end());
 
    world_info->collideables.push_back(temp_npc);
    world_info->collideables.push_back(temp_player);
-   world_info->collideables.insert(world_info->collideables.end(), npcs.begin(), npcs.end());
-
-   world_info->cur_dialogue = NULL;
-   
-   
+   world_info->collideables.insert(world_info->collideables.end(), npcs.begin(), npcs.end());   
 }
 
 bool pause = false;
@@ -85,29 +88,23 @@ int SceneTown::processControl(float dt)
    //continuous-response keys SEND INPUT TO PLAYER CLASS TO HANDLE MOVEMENT
    if (world_info->keystates[SDL_SCANCODE_E])
    {
-      for (int i = 0; i < objects.size();i++)
+      for (int i = 0; i < world_info->objects.size();i++)
       {
          NPC *other;
-         if ((other = dynamic_cast<NPC *> (objects.at(i))) != 0)
+         if ((other = dynamic_cast<NPC *> (world_info->objects.at(i))) != 0)
          {
-            if (distanceOfGO(other, temp_player) < 100) {
+            if (distanceOfGO(other, temp_player) < 100 && other->isInteracting == false) {
                other->interact();
             }
          }
       }
    }
 
-
    return 1;
 }
 
 void SceneTown::update(float dt)
 {
-   if (world_info->cur_dialogue != NULL)
-   {
-      world_info->cur_dialogue->update(dt);
-
-   }
   
    if (pause == true)
       return;
@@ -119,12 +116,14 @@ void SceneTown::update(float dt)
    world_info->cameraPosX = (int)temp_player->getWorldX();
    world_info->cameraPosY = (int)temp_player->getWorldY();
 
-   std::sort(objects.begin(), objects.end(), isFirstGameObject);
+   
 
-   for (int i = 0; i < objects.size(); i++)
+   for (int i = 0; i < world_info->objects.size(); i++)
    {
-      objects.at(i)->update(dt);
+      world_info->objects.at(i)->update(dt);
    }
+
+   std::sort(world_info->objects.begin(), world_info->objects.end(), isFirstGameObject);
 }
 
 
@@ -137,15 +136,15 @@ void SceneTown::render(float dt)
    
 
   
-   for (int i = 0; i < objects.size(); i++)
+   for (int i = 0; i < world_info->objects.size(); i++)
    {
-      objects.at(i)->render();
+      world_info->objects.at(i)->render();
    }
       
 
 
-   if(world_info->cur_dialogue != NULL && world_info->cur_dialogue->toRender() != NULL)
-      world_info->cur_dialogue->toRender()->render();
+  // if(world_info->cur_dialogue != NULL && world_info->cur_dialogue->toRender() != NULL)
+  //    world_info->cur_dialogue->toRender()->render();
 
 
    SDL_RenderPresent(world_info->renderer);
