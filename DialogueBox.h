@@ -69,12 +69,15 @@ public:
    // returns the box that needs to be currently rendered
    DialogueBox *toRender();
    void start();
+   void setName(std::string in) { sceneName = in; };
+   std::string getName() { return sceneName; };
 private:
    int curBox = 0;
    WorldInfo *info;
    std::vector<DialogueBox *> boxes;
    DialogueScene *nextScene;
    float timer;
+   std::string sceneName;
 };
 
 class DialogueBoxResponse : public DialogueBox

@@ -60,6 +60,7 @@ void DialogueBox::addLineOfText(std::string in)
    textTexture.push_back(SDL_CreateTextureFromSurface(info->renderer, textSurface.at(textlines.size() - 1)));
 }
 
+
 void DialogueBox::setTalkingSprite(std::string filename)
 {
    SDL_Surface *temp;

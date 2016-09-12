@@ -8,9 +8,76 @@ s2 wait 1
 s3 moveto 800 150 0 50
 s4 wait 1
 ENDSTATES
-DIALOGUE 
-Welcome to the first dialoge^
-Pound signs will indicate new pages^
-requiring user to press a button#
-ENDDIALOGUE
-ENDNPCDEF
+DIALOGUE DEF
+DIALOGUE SCENE: Scene1
+SPEAKER: Gren Ronlor
+ALIGNED: RIGHT
+SPRITE: materials/test/noct.png
+LINE: Welcome to the first dialogue.
+LINE: Each new line will create a new line 
+LINE: in the dialogue
+END ENTRY
+SPEAKER: Galga
+ALIGNED: LEFT
+SPRITE: materials/test/noct.png
+LINE: Yeah what 
+END ENTRY
+END SCENE
+DIALOGUE SCENE: Scene2
+SPEAKER: Gren Ronlor
+ALIGNED: RIGHT
+SPRITE: materials/test/noct.png
+LINE: This is the second dialogue after speaking.
+END ENTRY
+END SCENE
+END DIALOGUE
+SCENE PROGRESS
+Scene1 -> Scene2
+END PROGRESS
+END NPCDEF
+
+NPC 
+Some Guy
+materials/test/noct.png
+500 0 0 80 80
+STATES
+s1 moveto 0 0 0 50
+s2 wait 2
+s3 moveto 500 0 0 50
+s4 wait 2
+ENDSTATES
+DIALOGUE DEF
+DIALOGUE SCENE: Scene1
+SPEAKER: Some Guy
+ALIGNED: RIGHT
+SPRITE: materials/test/noct.png
+LINE: hello tehre testing new lines
+LINE: this is on a new line
+END ENTRY
+SPEAKER: Galga
+ALIGNED: LEFT
+SPRITE: materials/test/noct.png
+LINE: this is a test of multiple dialogs
+LINE: character is aligned on the other side
+END ENTRY
+SPEAKER: Galga
+ALIGNED: LEFT
+SPRITE: materials/test/noct.png
+LINE: this is a third test
+LINE: here we will test a third line
+LINE: here is the third line
+END ENTRY
+END SCENE
+DIALOGUE SCENE: Scene2
+SPEAKER: Some Guy
+ALIGNED: RIGHT
+SPRITE: materials/test/noct.png
+LINE: this is to test scenes going into another scene
+LINE: idk some shit
+END ENTRY
+END SCENE
+END DIALOGUE
+SCENE PROGRESS
+Scene1 -> Scene2
+END PROGRESS
+END NPCDEF

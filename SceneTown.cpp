@@ -36,20 +36,13 @@ void SceneTown::setup(WorldInfo *world)
    temp_player->addToDrawList();
    world_info->player = temp_player;
   
-   NPC *temp_npc = new NPCTEST(500, 0, 0, 80, 80, world_info);
-   temp_npc->setImage("materials/test/noct.png");
-   temp_npc->addToDrawList();
-   
-
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);
    for (int i = 0; i < npcs.size(); i++)
    {
       npcs.at(i)->addToDrawList();
    }
 
-  // world_info->objects.insert(world_info->objects.end(), npcs.begin(), npcs.end());
 
-   world_info->collideables.push_back(temp_npc);
    world_info->collideables.push_back(temp_player);
    world_info->collideables.insert(world_info->collideables.end(), npcs.begin(), npcs.end());   
 }
@@ -116,8 +109,6 @@ void SceneTown::update(float dt)
    world_info->cameraPosX = (int)temp_player->getWorldX();
    world_info->cameraPosY = (int)temp_player->getWorldY();
 
-   
-
    for (int i = 0; i < world_info->objects.size(); i++)
    {
       world_info->objects.at(i)->update(dt);
@@ -131,21 +122,11 @@ void SceneTown::update(float dt)
 
 void SceneTown::render(float dt)
 {
-   
-
-   
-
-  
+     
    for (int i = 0; i < world_info->objects.size(); i++)
    {
       world_info->objects.at(i)->render();
    }
       
-
-
-  // if(world_info->cur_dialogue != NULL && world_info->cur_dialogue->toRender() != NULL)
-  //    world_info->cur_dialogue->toRender()->render();
-
-
    SDL_RenderPresent(world_info->renderer);
 }

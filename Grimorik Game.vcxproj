@@ -146,7 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="materials\fonts\NPC_database.txt" />
     <Text Include="NPC_database.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>

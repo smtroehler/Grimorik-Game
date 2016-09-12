@@ -15,6 +15,13 @@ NPC::NPC(int x, int y, int z, int w, int h, WorldInfo *info) :
    has_quest_symbol->setVelocity(0, 50, 0);
    curState = NULL;
    last_spoken_to = 0;
+
+
+   DialogueBox *test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is the default text");
+   test->setTalkingSprite("materials/test/noct.png");
+   test->alignRight();
+   curScene = new DialogueScene(info);
+   curScene->addDialogueBox(test);
 }
 
 void NPC::render()
@@ -47,8 +54,17 @@ void  NPC::update(float dt)
       has_quest_symbol->update(dt);
    }
 
-   curState = curState->update(dt);
-
+   if (interactionBegun && isInteractionFinished == false)
+   {
+      if (curScene->dialogueIsFinished())
+         interactionFinished();
+      setVelocity(0, 0, 0);
+      curScene->update(dt);
+   }
+   else
+   {
+      curState = curState->update(dt);
+   }
 
 
 
@@ -56,15 +72,32 @@ void  NPC::update(float dt)
    CollideableObject::update(dt);
 }
 
-void NPC::interact()
-{
+void NPC::interact() {
+   if (isInteractionFinished == false)
+      return;
 
-   
+   if (interactionBegun == false && ((SDL_GetTicks() - last_spoken_to) / 1000.0f) > 0.5)
+   {
+      isInteractionFinished = false;
+      setVelocity(0, 0, 0);
+      hasQuest = false;
+      interactionBegun = true;
+      curScene->start();
+      info_ptr->player->setIsInteracting(true);
+      isInteracting = true;
+   }
+
+
 }
 
 void NPC::interactionFinished()
 {
-
+   curScene = curScene->getNextScene();
+   last_spoken_to = SDL_GetTicks();
+   isInteractionFinished = true;
+   info_ptr->player->setIsInteracting(false);
+   interactionBegun = false;
+   isInteracting = false;
 }
 
 void NPC::setStates(std::vector <State *> in)
@@ -76,138 +109,6 @@ void NPC::setStates(std::vector <State *> in)
       curState = states.at(0);
 }
 
-NPCTEST::NPCTEST(int x, int y, int z, int w, int h, WorldInfo *info) :
-   NPC(x, y, z, w, h, info)
-{
-
-   has_quest_symbol = new GameObject(x, y - (h / 2) - 35 , 0, 40, 40, info);
-   has_quest_symbol->setImage("materials/interaction/exclemation.png");
-   has_quest_symbol->setVelocity(0, 50, 0);
-
-   State *moveLeft, *stop_p1, *moveRight, *stop_p2;
-   states.push_back(new MoveToState(this, NULL, glm::vec3(0, 0, 0), 50));
-   states.push_back(new MoveToState(this, NULL, glm::vec3(600, 0, 0), 50));
-   states.push_back(new WaitState(this, 2.0f, NULL));
-   states.push_back(new WaitState(this, 2.0f, NULL));
-
-   curState = states.at(0);
-   states.at(0)->setNextState(states.at(1));
-   states.at(1)->setNextState(states.at(2));
-   states.at(2)->setNextState(states.at(3));
-   states.at(3)->setNextState(states.at(0));
-
-   name = "I have no name";
-
-
-
-   testscene = new DialogueScene(info);
-   test = new DialogueBox(info, glm::vec3(0, 0, 0), "hello tehre testing new lines");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("this is on a new line");
-
-   testscene->addDialogueBox(test);
-
-   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is a test of multiple dialogs");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("character is aligned on the other side");
-   test->alignLeft();
-
-   testscene->addDialogueBox(test);
-
-   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is a third test");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("here we will test a third line");
-   test->addLineOfText("here is the third line");
-   test->alignRight();
-
-   testscene->addDialogueBox(test);
-
-   secondscene = new DialogueScene(info);
-   test = new DialogueBox(info, glm::vec3(0, 0, 0), "this is to test scenes going into another scene");
-   test->setTalkingSprite("materials/test/noct.png");
-   test->addLineOfText("character is aligned on the other side");
-   test->alignLeft();
-   secondscene->addDialogueBox(test);
-   testscene->setNextScene(secondscene);
-}
-
-void NPCTEST::render()
-{
-   if (hasQuest)
-      has_quest_symbol->render();
-
-
-   CollideableObject::render();
-}
-
-void NPCTEST::update(float dt)
-{
-
-   if (hasQuest) {
-      has_quest_symbol->setWorldPos(worldX - has_quest_symbol->getWidth() / 2, has_quest_symbol->getWorldY());
-      float miny = worldY - (height / 2) - 35;
-      float maxy = worldY - (height / 2) - 45;
-      float cury = has_quest_symbol->getWorldY();
-
-      float normd_dist = ((cury - maxy) / 10);
-      if (normd_dist < 0.00001)
-      {
-         has_quest_symbol->setVelocity(velX, 35 + velY, 0);
-      }
-      else if (normd_dist > .9999)
-      {
-         has_quest_symbol->setVelocity(velX, -35 + velY, 0);
-      }
-
-     
-      has_quest_symbol->update(dt);
-   }
-
-   
-   if (interactionBegun && isInteractionFinished == false)
-   {
-      if (testscene->dialogueIsFinished())
-         interactionFinished();
-      setVelocity(0, 0, 0);
-      testscene->update(dt);
-   }
-   else
-   {
-      curState = curState->update(dt);
-   }
-
-   CollideableObject::update(dt);
-}
-
-
-void NPCTEST::interact() {
-   if (isInteractionFinished == false)
-      return;
-
-   if (interactionBegun == false && ((SDL_GetTicks() - last_spoken_to) / 1000.0f) > 0.5)
-   {
-      isInteractionFinished = false;
-      setVelocity(0, 0, 0);
-      hasQuest = false;
-      interactionBegun = true;
-      testscene->start();
-      info_ptr->player->setIsInteracting(true);
-      isInteracting = true;
-   }
-
-
-}
-
-void NPCTEST::interactionFinished() {
-   testscene = testscene->getNextScene();
-   last_spoken_to = SDL_GetTicks();
-   isInteractionFinished = true;
-   info_ptr->player->setIsInteracting(false);
-   interactionBegun = false;
-   isInteracting = false;
-  // info_ptr->cur_dialogue = NULL;
-  // info_ptr->cur_dialogue->removeFromDrawList();
-}
 
 std::vector<State *> createStates(std::ifstream& fin, WorldInfo *info, NPC *tobind)
 {
@@ -249,6 +150,144 @@ std::vector<State *> createStates(std::ifstream& fin, WorldInfo *info, NPC *tobi
    return out;
 }
 
+void loadSceneData(std::ifstream& fin, DialogueScene *scene, std::string buffer, WorldInfo *info)
+{
+   DialogueBox *tempBox = new DialogueBox(info, glm::vec3(0,0,0), "");   
+   std::string temp; 
+   int curLine = 0;
+   while (buffer.find("END ENTRY") == std::string::npos)
+   {
+
+      if (buffer.find("SPEAKER") != std::string::npos)
+      {
+         std::istringstream iss(buffer);
+         iss >> buffer;
+         iss >> buffer;
+         while (!iss.eof()) {
+            iss >> temp;
+            buffer.append(" " + temp);
+         }
+      }
+      else if (buffer.find("ALIGNED") != std::string::npos)
+      {
+         if (buffer.find("RIGHT") != std::string::npos)
+            tempBox->alignRight();
+         else if (buffer.find("LEFT") != std::string::npos)
+            tempBox->alignLeft();
+      }
+      else if (buffer.find("SPRITE") != std::string::npos)
+      {
+         std::istringstream iss(buffer);
+         iss >> buffer;
+         iss >> buffer;
+         tempBox->setTalkingSprite(buffer);
+      }
+      else if (buffer.find("LINE") != std::string::npos)
+      {
+         buffer.erase(buffer.begin(), buffer.begin() + 6);
+         if (buffer.at(0) == ' ')
+         {
+            buffer.erase(buffer.begin(), buffer.begin() + 1);
+         }
+         if (curLine == 0)
+         {
+            tempBox->setText(buffer, 0);
+            curLine++;
+         }
+         else
+         {
+            tempBox->addLineOfText(buffer);
+         }
+      }
+      std::getline(fin, buffer);
+   }
+   scene->addDialogueBox(tempBox);
+}
+
+
+void loadSceneName(std::string buffer, DialogueScene *scene)
+{
+   std::string temp;
+   if (buffer.find("DIALOGUE SCENE") != std::string::npos)
+   {
+      std::istringstream iss(buffer);
+      iss >> buffer;
+      iss >> buffer;
+      iss >> buffer;
+      while (!iss.eof()) {
+         iss >> temp;
+         buffer.append(" " + temp);
+      }
+      scene->setName(buffer);
+   }
+
+}
+
+std::vector<DialogueScene *> loadDialogueScenes(std::ifstream& fin, WorldInfo * info, NPC *out)
+{
+   std::vector<DialogueScene *> scenes;
+   std::string buffer;
+   int numScenes = 1, i = 0;
+
+   std::getline(fin, buffer);
+
+   while (buffer.find("END DIALOGUE") == std::string::npos)  {
+      scenes.push_back(new DialogueScene(info));
+      loadSceneName(buffer, scenes.at(i));
+
+      while (buffer.find("END SCENE") == std::string::npos) {
+         loadSceneData(fin, scenes.at(i), buffer, info);
+         std::getline(fin, buffer);
+      }
+
+      i++;
+      std::getline(fin, buffer);
+   }
+   if(scenes.size() > 0)
+      out->setDialogueScene(scenes.at(0));
+   return scenes;
+}
+
+void loadDialogueProgress(std::ifstream& fin, std::vector<DialogueScene *> scenes)
+{
+   std::string buffer, temp1 = "", temp2 = "";
+   DialogueScene *from, *to;
+   std::getline(fin, buffer);
+   std::istringstream iss(buffer);
+
+   while (buffer.find("END PROGRESS") == std::string::npos)
+   {
+      // these whiles make sure that words with spaces are taken into account
+      iss >> temp1;
+      while (buffer != "->") {
+         iss >> buffer;
+         if (buffer != "->") // check that the string being appended isn't the next "to" symbol
+            temp1.append(" " + buffer);
+      }
+      iss >> temp2;
+      while (!iss.eof()) {
+         iss >> buffer;
+         temp2.append(" " + buffer);
+      }
+
+      // lookup the name of the scene we want to transition from
+      for (int i = 0; i < scenes.size(); i++) {
+         if (scenes.at(i)->getName() == temp1) {
+            from = scenes.at(i);
+         }
+      }
+      // lookup the name of the scene we want to transition to
+      for (int i = 0; i < scenes.size(); i++) {
+         if (scenes.at(i)->getName() == temp2) {
+            to = scenes.at(i);
+         }
+      }
+
+      from->setNextScene(to);
+      std::getline(fin, buffer);
+      std::istringstream iss(buffer);
+   }
+}
 
 NPC * createNPCFromDatabase(std::ifstream& fin, WorldInfo *info)
 {
@@ -271,26 +310,26 @@ NPC * createNPCFromDatabase(std::ifstream& fin, WorldInfo *info)
    std::getline(fin, buffer);
    std::getline(fin, buffer);
 
-
-   while (buffer != "ENDNPCDEF") {
-      if (buffer == "STATES")
-      {
-         std::cout << "setting states\n";
+   std::vector<DialogueScene *> scenes;
+   while (buffer.find("END NPCDEF") == std::string::npos) {
+      
+      if (buffer.find("STATES") != std::string::npos) {
          out->setName(name);
          out->setStates(createStates(fin, info, out));
       }
-      if (buffer == "DIALOGUE")
-      {
-         std::cout << "loading dialogue\n";
-         while (buffer != "ENDDIALOGUE")
-         {
-            fin >> buffer;
+
+      if (buffer.find("DIALOGUE DEF") != std::string::npos) {
+         scenes = loadDialogueScenes(fin, info, out);
+      }
+
+      if (buffer.find("SCENE PROGRESS") != std::string::npos) {
+         if (scenes.size() > 1) {
+            loadDialogueProgress(fin, scenes);
          }
          
       }
-      fin >> buffer;
+      std::getline(fin, buffer);
    }
-   std::cout << "finished loading npc\n";
    return out;
 }
 
@@ -306,20 +345,23 @@ std::vector<NPC*> NPCLoader(std::string in, WorldInfo *info) {
       std::cout << "Could not open specified NPC database\n";
    }
 
+   
    while (!fin.eof())
    {
       std::getline(fin, buffer);
-      if (buffer != "NPC")
+
+      if (buffer.find("NPC") != std::string::npos)
       {
-         std::cout << "NPC BLOCK INCORRECT. 'NPC' required at beginning of block\n";
-         std::cout << "got instead: \"" << buffer << "\"\n";
-         return out;
+         out.push_back(createNPCFromDatabase(fin, info));
+        // std::cout << "NPC BLOCK INCORRECT. 'NPC' required at beginning of block\n";
+       //  std::cout << "got instead: \"" << buffer << "\"\n";
+       //  return out;
       }
       else
       {
-         out.push_back(createNPCFromDatabase(fin, info));
+         std::cout << buffer << "\n";
       }
-
+      
    }
 
    return out;

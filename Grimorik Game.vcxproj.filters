@@ -19,9 +19,6 @@
     <Text Include="NPC_database.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="materials\fonts\NPC_database.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
