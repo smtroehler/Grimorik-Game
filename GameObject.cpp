@@ -214,12 +214,12 @@ void CollideableObject::update(float dt)
    {
       if (info_ptr->collideables.at(i) != this)
       {
-        
+         
          BoundingBox *bbox2 = info_ptr->collideables.at(i)->getBBox();
-         float d1x = bbox2->x - bbox->x - bbox->w / 2;
-         float d1y = bbox2->y - bbox->y - bbox->h ;
-         float d2x = bbox->x - bbox2->x - bbox2->w / 2;
-         float d2y = bbox->y - bbox2->y - bbox2->h ;
+         float d1x = (bbox2->x + bbox2->offsetx) - (bbox->x + bbox->offsetx + bbox->w / 2);
+         float d1y = (bbox2->y + bbox2->offsety) - (bbox->y + bbox->offsety + bbox->h) ;
+         float d2x = (bbox->x + bbox->offsetx) - (bbox2->x + bbox2->offsetx + bbox2->w / 2);
+         float d2y = (bbox->y + bbox->offsety) - (bbox2->y + bbox2->offsety + bbox2->h) ;
 
          float smallest = d1x;
 
@@ -262,6 +262,8 @@ void CollideableObject::setWorldPos(float x, float y)
 void CollideableObject::setImage(const char* file)
 {
    GameObject::setImage(file);
+   bbox->offsetx = 0;
+   bbox->offsetx = 0;
    bbox->x = worldX;
    bbox->y = worldY;
    bbox->w = width;
@@ -276,4 +278,16 @@ void CollideableObject::addToDrawList()
 void CollideableObject::removeFromDrawList()
 {
    GameObject::removeFromDrawList();
+}
+
+void CollideableObject::offSetBBox(float offsetx, float offsety, float w, float h)
+{
+   if (offsetx != -1)
+      bbox->offsetx = offsetx;
+   if (offsety != -1)
+      bbox->offsety = offsety;
+   if (w != -1)
+      bbox->w = w;
+   if (h != -1)
+      bbox->h = h;
 }

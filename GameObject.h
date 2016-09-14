@@ -82,6 +82,7 @@ public:
 
    virtual void addToDrawList();
    virtual void removeFromDrawList();
+   void offSetBBox(float offsetx, float offsety, float w, float h);
 };
 
 bool isFirstGameObject(GameObject *t, GameObject *o);

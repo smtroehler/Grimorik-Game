@@ -34,6 +34,7 @@ void SceneTown::setup(WorldInfo *world)
    temp_player = new PlayerObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.png");
    temp_player->addToDrawList();
+   temp_player->offSetBBox(0, temp_player->getHeight() / 2, -1 , temp_player->getHeight() / 2);
    world_info->player = temp_player;
   
    std::vector<NPC *> npcs = NPCLoader("NPC_database.txt", world_info);

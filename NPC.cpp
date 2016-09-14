@@ -150,10 +150,10 @@ std::vector<State *> createStates(std::ifstream& fin, WorldInfo *info, NPC *tobi
    return out;
 }
 
-void loadSceneData(std::ifstream& fin, DialogueScene *scene, std::string buffer, WorldInfo *info)
+DialogueBox *loadSceneData(std::ifstream& fin, std::string buffer, WorldInfo *info)
 {
    DialogueBox *tempBox = new DialogueBox(info, glm::vec3(0,0,0), "");   
-   std::string temp; 
+   std::string temp, speakerName = "Stranger"; 
    int curLine = 0;
    while (buffer.find("END ENTRY") == std::string::npos)
    {
@@ -167,6 +167,7 @@ void loadSceneData(std::ifstream& fin, DialogueScene *scene, std::string buffer,
             iss >> temp;
             buffer.append(" " + temp);
          }
+         speakerName = buffer;
       }
       else if (buffer.find("ALIGNED") != std::string::npos)
       {
@@ -191,7 +192,7 @@ void loadSceneData(std::ifstream& fin, DialogueScene *scene, std::string buffer,
          }
          if (curLine == 0)
          {
-            tempBox->setText(buffer, 0);
+            tempBox->setText(speakerName + ": "+ buffer, 0);
             curLine++;
          }
          else
@@ -201,7 +202,7 @@ void loadSceneData(std::ifstream& fin, DialogueScene *scene, std::string buffer,
       }
       std::getline(fin, buffer);
    }
-   scene->addDialogueBox(tempBox);
+   return (tempBox);
 }
 
 
@@ -236,7 +237,7 @@ std::vector<DialogueScene *> loadDialogueScenes(std::ifstream& fin, WorldInfo * 
       loadSceneName(buffer, scenes.at(i));
 
       while (buffer.find("END SCENE") == std::string::npos) {
-         loadSceneData(fin, scenes.at(i), buffer, info);
+         scenes.at(i)->addDialogueBox(loadSceneData(fin, buffer, info));
          std::getline(fin, buffer);
       }
 
@@ -316,6 +317,16 @@ NPC * createNPCFromDatabase(std::ifstream& fin, WorldInfo *info)
       if (buffer.find("STATES") != std::string::npos) {
          out->setName(name);
          out->setStates(createStates(fin, info, out));
+      }
+      if (buffer.find("BBOX") != std::string::npos) {
+         int xoffset, yoffset, w, h;
+         std::istringstream iss(buffer);
+         iss >> buffer;
+         iss >> xoffset;
+         iss >> yoffset;
+         iss >> w;
+         iss >> h;
+         out->offSetBBox(xoffset, yoffset, w, h);
       }
 
       if (buffer.find("DIALOGUE DEF") != std::string::npos) {

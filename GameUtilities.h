@@ -21,6 +21,7 @@ struct BoundingBox {
 
    int x, y;
    int w, h;
+   int offsetx, offsety;
 
 };
 
