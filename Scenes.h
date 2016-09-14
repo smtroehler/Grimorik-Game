@@ -25,19 +25,37 @@ class SceneTown : public GameScene
    private:
       PlayerObject *temp_player;
       GameObject *temp_player_static;
-      glm::vec2 playerVel = glm::vec2(0, 0);
-      bool isMovingX = false;
-      bool isMovingY = false;
   
       WorldInfo *world_info;
-      float rectCoordX = 0;
-      float rectCoordY = 0;
 
    //   std::vector<GameObject *> objects;
       
 
       
   //    std::vector<int> objects;
+};
+
+class SceneInside : public GameScene
+{
+public:
+   SceneInside();
+   virtual ~SceneInside();
+   virtual void setup(WorldInfo *world);
+   virtual int processControl(float dt);
+   virtual void update(float dt);
+   virtual void render(float dt);
+
+private:
+   PlayerObject *temp_player;
+   GameObject *temp_player_static;
+
+   WorldInfo *world_info;
+
+   //   std::vector<GameObject *> objects;
+
+
+
+   //    std::vector<int> objects;
 };
 
 #endif

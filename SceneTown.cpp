@@ -104,8 +104,6 @@ void SceneTown::update(float dt)
       return;
 
   
-   rectCoordX += playerVel.x * dt;
-   rectCoordY += playerVel.y * dt;
 
    world_info->cameraPosX = (int)temp_player->getWorldX();
    world_info->cameraPosY = (int)temp_player->getWorldY();
@@ -129,5 +127,146 @@ void SceneTown::render(float dt)
       world_info->objects.at(i)->render();
    }
       
+   SDL_RenderPresent(world_info->renderer);
+}
+
+SceneInside::SceneInside()
+{
+
+}
+
+SceneInside::~SceneInside()
+{
+
+}
+
+
+
+void SceneInside::setup(WorldInfo *world)
+{
+   world->dialogueFont = TTF_OpenFont("c:/Windows/Fonts/KELMSCOT.ttf", 24); //this opens a font style and sets a size
+   if (!world->dialogueFont) {
+      printf("TTF_OpenFont: %s\n", TTF_GetError());
+      // handle error
+   }
+
+   world_info = world;
+
+   GameObject *temp_bg = new GameObject(0, 0, -3, 1024, 1024, world_info);
+   temp_bg->setImage("materials/test/insidefloor.png");
+   world_info->objects = std::vector<GameObject *>();
+   temp_bg->addToDrawList();
+
+   CollideableObject *wall = new CollideableObject(0, -512, -2, 1024, 257, world_info);
+   wall->setImage("materials/test/backwall.png");
+   wall->addToDrawList();
+   wall->offSetBBox(0, 0, -1, wall->getHeight() / 2);
+   world_info->collideables.push_back(wall);
+
+
+   wall = new CollideableObject(0, 512, -2, 1024, 144, world_info);
+   wall->setImage("materials/test/wall_front.png");
+   wall->addToDrawList();
+   wall->offSetBBox(0, wall->getHeight() / 3, -1, wall->getHeight() / 2);
+   world_info->collideables.push_back(wall);
+
+   wall = new CollideableObject(512, 0, -2, 142, 1024, world_info);
+   wall->setImage("materials/test/wall_right.png");
+   wall->addToDrawList();
+   wall->offSetBBox(0, 0, wall->getWidth() / 3, -1);
+   world_info->collideables.push_back(wall);
+
+   wall = new CollideableObject(-512, 0, -2, 142, 1024, world_info);
+   wall->setImage("materials/test/wall_left.png");
+   wall->addToDrawList();
+   wall->offSetBBox(0, 0, wall->getWidth() / 3, -1);
+   world_info->collideables.push_back(wall);
+   
+   temp_player = new PlayerObject(0, 0, 0, 43, 80, world_info);
+   temp_player->setImage("materials/test/noct.png");
+   temp_player->addToDrawList();
+   temp_player->offSetBBox(0, temp_player->getHeight() / 4, -1, temp_player->getHeight() / 2);
+   world_info->player = temp_player;
+
+
+   world_info->collideables.push_back(temp_player);
+}
+
+
+int SceneInside::processControl(float dt)
+{
+   SDL_Event e;
+   if (SDL_PollEvent(&e)) {
+      /* an event was found */
+      switch (e.type) {
+         /* close button clicked */
+      case SDL_QUIT:
+         return -1;
+         break;
+         /* handle the keyboard */
+      case SDL_KEYDOWN:
+         switch (e.key.keysym.sym) {
+         case SDLK_ESCAPE:
+            return -1;
+            break;
+         case SDLK_SPACE:
+            pause = !pause;
+            break;
+         }
+         break;
+
+      }
+   }
+
+
+
+   world_info->keystates = SDL_GetKeyboardState(NULL);
+
+   //continuous-response keys SEND INPUT TO PLAYER CLASS TO HANDLE MOVEMENT
+   if (world_info->keystates[SDL_SCANCODE_E])
+   {
+      for (int i = 0; i < world_info->objects.size();i++)
+      {
+         NPC *other;
+         if ((other = dynamic_cast<NPC *> (world_info->objects.at(i))) != 0)
+         {
+            if (distanceOfGO(other, temp_player) < 100 && other->isInteracting == false) {
+               other->interact();
+            }
+         }
+      }
+   }
+
+   return 1;
+}
+
+void SceneInside::update(float dt)
+{
+
+   if (pause == true)
+      return;
+
+
+
+   world_info->cameraPosX = (int)temp_player->getWorldX() ;
+   world_info->cameraPosY = (int)temp_player->getWorldY();
+
+   for (int i = 0; i < world_info->objects.size(); i++)
+   {
+      world_info->objects.at(i)->update(dt);
+   }
+
+   std::sort(world_info->objects.begin(), world_info->objects.end(), isFirstGameObject);
+}
+
+
+void SceneInside::render(float dt)
+{
+
+   for (int i = 0; i < world_info->objects.size(); i++)
+   {
+      world_info->objects.at(i)->render();
+   }
+
    SDL_RenderPresent(world_info->renderer);
 }

@@ -35,7 +35,7 @@ void NPC::render()
 void  NPC::update(float dt)
 {
    if (hasQuest) {
-      has_quest_symbol->setWorldPos(worldX - has_quest_symbol->getWidth()/2, has_quest_symbol->getWorldY());
+      has_quest_symbol->setWorldPos(worldX , has_quest_symbol->getWorldY());
       float miny = worldY - (height / 2) - 35;
       float maxy = worldY - (height / 2) - 45;
       float cury = has_quest_symbol->getWorldY();

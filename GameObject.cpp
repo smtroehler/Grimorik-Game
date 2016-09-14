@@ -3,6 +3,7 @@
 #include "SDL_image.h"
 #include <iostream>
 
+
 GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
 {
    worldX = x;
@@ -67,6 +68,8 @@ void GameObject::setImage(const char* file)
    temp = IMG_Load(file);
 
    glm::vec2 normedImage = normalizeImage(temp, width, height);
+   width = (int)normedImage.x;
+   height = (int)normedImage.y;
    fillRect = { (int)worldX,  (int)worldY,  (int)normedImage.x, (int)normedImage.y };
    bitmapTex = SDL_CreateTextureFromSurface(info_ptr->renderer, temp);
 
@@ -136,7 +139,7 @@ void GameObject::update(float dt) {
 
 void GameObject::render() {
 
-   fillRect.x = (int) worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2;
+   fillRect.x = (int) (worldX - info_ptr->cameraPosX + info_ptr->screenWidth / 2 - width / 2);
    fillRect.y = (int) (worldY - info_ptr->cameraPosY + info_ptr->screenHeight / 2 - height / 2);
 
 
@@ -197,14 +200,18 @@ CollideableObject::CollideableObject(int x, int y, int z, int w, int h, WorldInf
    bbox = new BoundingBox();
    bbox->x = x;
    bbox->y = y;
-   bbox->w = h;
-   bbox->w = h;
+   bbox->w = w;
+   bbox->h = h;
+   bbox->offsetx = 0;
+   bbox->offsety = 0;
 }
 
 void CollideableObject::render()
 {
    GameObject::render();
 }
+
+#include "PlayerObject.h"
 void CollideableObject::update(float dt)
 {
    bbox->x = worldX;
@@ -216,21 +223,20 @@ void CollideableObject::update(float dt)
       {
          
          BoundingBox *bbox2 = info_ptr->collideables.at(i)->getBBox();
-         float d1x = (bbox2->x + bbox2->offsetx) - (bbox->x + bbox->offsetx + bbox->w / 2);
-         float d1y = (bbox2->y + bbox2->offsety) - (bbox->y + bbox->offsety + bbox->h) ;
-         float d2x = (bbox->x + bbox->offsetx) - (bbox2->x + bbox2->offsetx + bbox2->w / 2);
-         float d2y = (bbox->y + bbox->offsety) - (bbox2->y + bbox2->offsety + bbox2->h) ;
+         float d1x = (bbox2->x + bbox2->offsetx - bbox2->w / 2) - (bbox->x + bbox->offsetx + bbox->w / 2);
+         float d1y = (bbox2->y + bbox2->offsety - bbox2->h / 2) - (bbox->y + bbox->offsety + bbox->h / 2);
+         float d2x = (bbox->x + bbox->offsetx - bbox->w / 2) - (bbox2->x + bbox2->offsetx + bbox2->w / 2);
+         float d2y = (bbox->y + bbox->offsety - bbox->h / 2) - (bbox2->y + bbox2->offsety + bbox2->h / 2);
 
          float smallest = d1x;
 
       //   std::cout << d1x << " " << d1x << " " << d2x << " " << d2y << "\n";
          if (d1x > 0.0f || d1y > 0.0f)
          {
-
+          
          }
          else if (d2x > 0.0f || d2y > 0.0f)
          {
-
          }
          else
          {
@@ -239,11 +245,19 @@ void CollideableObject::update(float dt)
             if (d1x  > -3 && velX > 0)
                velX = 0;
             if (d2y > -3 && velY < 0)
+            {
                velY = 0;
-            if (d1y  > -3 && velY > 0)
+            }
+            if (d1y > -3 && velY > 0)
+            {
                velY = 0;
-
+            }
+            
          }
+         CollideableObject * other;
+         other = dynamic_cast<CollideableObject *> (info_ptr->player);
+      //   if(this == other && d2y > -5)
+           // std::cout << d1x << " " << d1y << " " << d2x << " " << d2y << "\n";
       }
    }
 

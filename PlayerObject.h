@@ -8,5 +8,8 @@ public:
 
    virtual void render();
    virtual void update(float dt);
+
+   virtual void addToDrawList();
+   virtual void removeFromDrawList();
    
 };

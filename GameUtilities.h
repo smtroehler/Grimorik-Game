@@ -12,7 +12,7 @@
 //#include "GameObject.h
 
 
-
+extern class GameScene;
 extern class CollideableObject;
 extern class GameObject;
 extern class DialogueScene;
@@ -39,6 +39,8 @@ struct WorldInfo
    SDL_Window *win;
    TTF_Font* dialogueFont;
    const Uint8* keystates;
+
+   GameScene *curScene;
 
    std::vector<CollideableObject *> collideables;
    std::vector<GameObject *> objects;

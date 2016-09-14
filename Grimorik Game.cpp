@@ -18,9 +18,10 @@ void gameLoop( WorldInfo *world_info)
    Uint32 ticks;
    float seconds;
    float prev = 0, cur, dt = 0.0f;
-   SceneTown scene1;
-   scene1.setup(world_info);
-   
+   GameScene *scene1;
+   scene1 = new SceneTown();
+   scene1->setup(world_info);
+   world_info->curScene = scene1;
    while (1) {
 
       const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -38,16 +39,16 @@ void gameLoop( WorldInfo *world_info)
 
       prev = ticks;
       
-      if (scene1.processControl(dtsec) == -1)
+      if (scene1->processControl(dtsec) == -1)
          return;
-      scene1.update(dtsec);
+      scene1->update(dtsec);
 
       // clears the screen
       SDL_SetRenderDrawColor(world_info->renderer, 0x00, 0x00, 0x00, 0xFF);
       SDL_RenderClear(world_info->renderer);
 
    
-      scene1.render(dtsec);
+      scene1->render(dtsec);
       
    }
 }

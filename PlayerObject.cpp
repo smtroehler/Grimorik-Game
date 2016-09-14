@@ -49,3 +49,12 @@ void PlayerObject::update(float dt)
 
    CollideableObject::update(dt);
 }
+
+void PlayerObject::addToDrawList()
+{
+   CollideableObject::addToDrawList();
+}
+void PlayerObject::removeFromDrawList()
+{
+   CollideableObject::removeFromDrawList();
+}
