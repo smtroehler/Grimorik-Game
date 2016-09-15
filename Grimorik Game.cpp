@@ -18,10 +18,18 @@ void gameLoop( WorldInfo *world_info)
    Uint32 ticks;
    float seconds;
    float prev = 0, cur, dt = 0.0f;
-   GameScene *scene1;
-   scene1 = new SceneTown();
+
+   // create the town scene and make it the current scene
+   GameScene *scene1 = new SceneTown();
    scene1->setup(world_info);
    world_info->curScene = scene1;
+   world_info->scenes.push_back(scene1);
+
+   // create the cave scene
+   scene1 = new SceneInside();
+   scene1->setup(world_info);
+   world_info->scenes.push_back(scene1);
+
    while (1) {
 
       const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -39,16 +47,16 @@ void gameLoop( WorldInfo *world_info)
 
       prev = ticks;
       
-      if (scene1->processControl(dtsec) == -1)
+      if (world_info->curScene->processControl(dtsec) == -1)
          return;
-      scene1->update(dtsec);
+      world_info->curScene->update(dtsec);
 
       // clears the screen
       SDL_SetRenderDrawColor(world_info->renderer, 0x00, 0x00, 0x00, 0xFF);
       SDL_RenderClear(world_info->renderer);
 
    
-      scene1->render(dtsec);
+      world_info->curScene->render(dtsec);
       
    }
 }

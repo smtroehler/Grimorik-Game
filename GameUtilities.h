@@ -42,11 +42,15 @@ struct WorldInfo
 
    GameScene *curScene;
 
-   std::vector<CollideableObject *> collideables;
-   std::vector<GameObject *> objects;
+   std::vector<CollideableObject *> *collideables;
+   std::vector<GameObject *> *objects;
+   
+
    PlayerObject *player;
+   std::vector<GameScene *> scenes;
 };
 #endif
+
 
 
 // keep track of completed quests and quest items here

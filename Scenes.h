@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "DialogueBox.h"
 #include "PlayerObject.h"
+#include "AreaPortal.h"
 class SceneTown : public GameScene
 {
    public:
@@ -22,12 +23,13 @@ class SceneTown : public GameScene
       virtual void update(float dt);
       virtual void render(float dt);
 
+      virtual void EnterScene(std::string entryPoint);
    private:
       PlayerObject *temp_player;
       GameObject *temp_player_static;
   
-      WorldInfo *world_info;
-
+     
+      AreaPortal *nextAreaPortal;
    //   std::vector<GameObject *> objects;
       
 
@@ -45,14 +47,14 @@ public:
    virtual void update(float dt);
    virtual void render(float dt);
 
+   virtual void EnterScene(std::string entryPoint);
 private:
-   PlayerObject *temp_player;
    GameObject *temp_player_static;
 
-   WorldInfo *world_info;
 
    //   std::vector<GameObject *> objects;
-
+   AreaPortal *nextAreaPortal;
+   
 
 
    //    std::vector<int> objects;

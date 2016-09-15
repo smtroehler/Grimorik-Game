@@ -50,7 +50,6 @@ class GameObject
 
       bool isInteracting;
 
-      bool isInList;
    protected:
       // Keeps track of world coords.
       float worldX, worldY, worldZ;
@@ -82,7 +81,15 @@ public:
 
    virtual void addToDrawList();
    virtual void removeFromDrawList();
+
+   void addToCollisionList();
+   void removeFromCollisionList();
+
    void offSetBBox(float offsetx, float offsety, float w, float h);
+
+   bool getIsSolid() { return isSolid; };
+   void setIsSolid(bool in) { isSolid = in; };
+   bool isSolid;
 };
 
 bool isFirstGameObject(GameObject *t, GameObject *o);

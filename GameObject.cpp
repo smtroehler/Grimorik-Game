@@ -25,7 +25,6 @@ GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
    info_ptr = info;
    fillRect = {x, y, w, h };
 
-   isInList = false;
    isInteracting = false;
 }
 
@@ -156,26 +155,31 @@ void GameObject::render() {
 
 void GameObject::addToDrawList()
 {
-   if (isInList == true)
-      return;
+   bool notInList = true;
+   for (int i = 0; i < info_ptr->objects->size(); i++)
+   {
+      if (this == info_ptr->objects->at(i))
+      {
+         notInList = false;
+      }
+   }
 
-   info_ptr->objects.push_back(this);
-   isInList = true;
+   if (notInList)
+   {
+      info_ptr->objects->push_back(this);
+   }
+   
 }
 
 void GameObject::removeFromDrawList()
 {
-   if (isInList == false)
-      return;
-
-   for (int i = 0; i < info_ptr->objects.size(); i++)
+   for (int i = 0; i < info_ptr->objects->size(); i++)
    {
-      if (info_ptr->objects.at(i) == this)
+      if (info_ptr->objects->at(i) == this)
       {
-         info_ptr->objects.erase(info_ptr->objects.begin() + i);
+         info_ptr->objects->erase(info_ptr->objects->begin() + i);
       }
    }
-   isInList = false;
 }
 
 bool isFirstGameObject(GameObject *t, GameObject *o)
@@ -204,6 +208,7 @@ CollideableObject::CollideableObject(int x, int y, int z, int w, int h, WorldInf
    bbox->h = h;
    bbox->offsetx = 0;
    bbox->offsety = 0;
+   isSolid = true;
 }
 
 void CollideableObject::render()
@@ -217,20 +222,17 @@ void CollideableObject::update(float dt)
    bbox->x = worldX;
    bbox->y = worldY;
 
-   for (int i = 0; i < info_ptr->collideables.size(); i++)
+   for (int i = 0; i < info_ptr->collideables->size(); i++)
    {
-      if (info_ptr->collideables.at(i) != this)
+      if (info_ptr->collideables->at(i) != this && info_ptr->collideables->at(i)->getIsSolid())
       {
          
-         BoundingBox *bbox2 = info_ptr->collideables.at(i)->getBBox();
+         BoundingBox *bbox2 = info_ptr->collideables->at(i)->getBBox();
          float d1x = (bbox2->x + bbox2->offsetx - bbox2->w / 2) - (bbox->x + bbox->offsetx + bbox->w / 2);
          float d1y = (bbox2->y + bbox2->offsety - bbox2->h / 2) - (bbox->y + bbox->offsety + bbox->h / 2);
          float d2x = (bbox->x + bbox->offsetx - bbox->w / 2) - (bbox2->x + bbox2->offsetx + bbox2->w / 2);
          float d2y = (bbox->y + bbox->offsety - bbox->h / 2) - (bbox2->y + bbox2->offsety + bbox2->h / 2);
 
-         float smallest = d1x;
-
-      //   std::cout << d1x << " " << d1x << " " << d2x << " " << d2y << "\n";
          if (d1x > 0.0f || d1y > 0.0f)
          {
           
@@ -254,10 +256,6 @@ void CollideableObject::update(float dt)
             }
             
          }
-         CollideableObject * other;
-         other = dynamic_cast<CollideableObject *> (info_ptr->player);
-      //   if(this == other && d2y > -5)
-           // std::cout << d1x << " " << d1y << " " << d2x << " " << d2y << "\n";
       }
    }
 
@@ -304,4 +302,33 @@ void CollideableObject::offSetBBox(float offsetx, float offsety, float w, float 
       bbox->w = w;
    if (h != -1)
       bbox->h = h;
+}
+
+void CollideableObject::addToCollisionList()
+{
+   bool notInList = true;
+   for (int i = 0; i < info_ptr->collideables->size(); i++)
+   {
+      if (this == info_ptr->collideables->at(i))
+      {
+         notInList = false;
+      }
+   }
+
+   if (notInList)
+   {
+      info_ptr->collideables->push_back(this);
+   }
+
+}
+
+void CollideableObject::removeFromCollisionList()
+{
+   for (int i = 0; i < info_ptr->collideables->size(); i++)
+   {
+      if (info_ptr->collideables->at(i) == this)
+      {
+         info_ptr->collideables->erase(info_ptr->collideables->begin() + i);
+      }
+   }
 }

@@ -1,5 +1,6 @@
 #include "PlayerObject.h"
 
+#include <iostream>
 PlayerObject::PlayerObject(int x, int y, int z, int w, int h, WorldInfo *info) :
    CollideableObject(x, y, z, w, h, info) {
    isInteracting = false;

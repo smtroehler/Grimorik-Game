@@ -16,8 +16,17 @@ class GameScene
       virtual int processControl(float dt) = 0;
       virtual void update(float dt) = 0;
       virtual void render(float dt) = 0;
+      bool isSetup() { return setupCalled; };
+      WorldInfo* getWorldInfoPtr() {return world_info;};
+      virtual void EnterScene(std::string entryPoint) = 0;
+      std::string getName() { return sceneName; };
 
-   
+protected:
+   bool setupCalled = false;
+   std::string sceneName; 
+   WorldInfo *world_info;
+   std::vector<GameObject *> sceneObjects;
+   std::vector<CollideableObject *> sceneCollideables;
 };
 
 #endif
