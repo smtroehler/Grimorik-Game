@@ -24,6 +24,7 @@ class SceneTown : public GameScene
       virtual void render(float dt);
 
       virtual void EnterScene(std::string entryPoint);
+      virtual void exitingScene() { GameScene::exitingScene(); };
    private:
       PlayerObject *temp_player;
       GameObject *temp_player_static;
@@ -48,6 +49,7 @@ public:
    virtual void render(float dt);
 
    virtual void EnterScene(std::string entryPoint);
+   virtual void exitingScene() { GameScene::exitingScene(); };
 private:
    GameObject *temp_player_static;
 

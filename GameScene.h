@@ -7,7 +7,7 @@
 #include "GameUtilities.h"
 #include <vector>
 #include "GameObject.h"
-
+#include "PlayerObject.h"
 class GameScene
 {
    public:
@@ -19,6 +19,12 @@ class GameScene
       bool isSetup() { return setupCalled; };
       WorldInfo* getWorldInfoPtr() {return world_info;};
       virtual void EnterScene(std::string entryPoint) = 0;
+      virtual void exitingScene() { 
+         world_info->objects = &sceneObjects;
+         world_info->collideables = &sceneCollideables;
+         world_info->player->removeFromCollisionList();
+         world_info->player->removeFromDrawList();
+      };
       std::string getName() { return sceneName; };
 
 protected:

@@ -16,8 +16,10 @@ void AreaPortal::transitionToScene()
 
    for (int i = 0; i < info_ptr->scenes.size(); i++)
    {
-      if (info_ptr->scenes.at(i)->getName() == nextScene)
+      if (info_ptr->scenes.at(i)->getName() == nextScene) {
+         info_ptr->curScene->exitingScene();
          info_ptr->scenes.at(i)->EnterScene(entryPoint);
+      }
    }
    timeExisting = 0;
    playerStartsInBox = false;

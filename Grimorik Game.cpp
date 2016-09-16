@@ -49,7 +49,12 @@ void gameLoop( WorldInfo *world_info)
       
       if (world_info->curScene->processControl(dtsec) == -1)
          return;
-      world_info->curScene->update(dtsec);
+      //world_info->curScene->update(dtsec);
+      for (int i = 0; i < world_info->scenes.size(); i++)
+      {
+         world_info->scenes.at(i)->update(dtsec);
+      }
+      
 
       // clears the screen
       SDL_SetRenderDrawColor(world_info->renderer, 0x00, 0x00, 0x00, 0xFF);

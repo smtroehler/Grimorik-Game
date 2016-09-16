@@ -149,11 +149,15 @@ void SceneTown::EnterScene(std::string loc)
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
 
+
+
+
    world_info->curScene = this;
    if (loc == "caveDoorway1")
    {
       world_info->player->setWorldPos(0, -450);
-    //  world_info->player->addToDrawList();
+      world_info->player->addToDrawList();
+      world_info->player->addToCollisionList();
     //  world_info->collideables->push_back(world_info->player);
 
    }
@@ -164,12 +168,13 @@ void SceneTown::EnterScene(std::string loc)
 
 void SceneTown::render(float dt)
 {
+
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
-
-   for (int i = 0; i < sceneObjects.size(); i++)
+   std::cout << "here1\n";
+   for (int i = 0; i < world_info->objects->size(); i++)
    {
-      sceneObjects.at(i)->render();
+      world_info->objects->at(i)->render();
    }
       
    SDL_RenderPresent(world_info->renderer);
@@ -238,8 +243,8 @@ void SceneInside::setup(WorldInfo *world)
    wall->offSetBBox(0, 0, wall->getWidth() / 3, -1);
    world_info->collideables->push_back(wall);
    
-   world_info->player->addToDrawList();
-   world_info->collideables->push_back(world_info->player);
+   //world_info->player->addToDrawList();
+ //  world_info->collideables->push_back(world_info->player);
 
 
    nextAreaPortal = new AreaPortal(0, 500, 0, 100, 60, world_info);
@@ -258,6 +263,8 @@ void SceneInside::EnterScene(std::string loc)
    if (loc == "caveDoorway1")
    {
       world_info->player->setWorldPos(0, 450);
+      world_info->player->addToDrawList();
+      world_info->player->addToCollisionList();
    }
 }
 
@@ -320,7 +327,6 @@ void SceneInside::update(float dt)
       return;
 
 
-   std::cout << "here\n";
    world_info->cameraPosX = (int)world_info->player->getWorldX() ;
    world_info->cameraPosY = (int)world_info->player->getWorldY();
 
@@ -335,6 +341,7 @@ void SceneInside::update(float dt)
 
 void SceneInside::render(float dt)
 {
+
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
 
