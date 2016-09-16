@@ -128,7 +128,7 @@ void SceneTown::update(float dt)
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
 
-   if (pause == true)
+   if (world_info->pause == true)
       return;
 
   
@@ -152,12 +152,13 @@ void SceneTown::EnterScene(std::string loc)
 
 
 
-   world_info->curScene = this;
    if (loc == "caveDoorway1")
    {
       world_info->player->setWorldPos(0, -450);
       world_info->player->addToDrawList();
       world_info->player->addToCollisionList();
+      world_info->cameraPosX = (int)world_info->player->getWorldX();
+      world_info->cameraPosY = (int)world_info->player->getWorldY();
     //  world_info->collideables->push_back(world_info->player);
 
    }
@@ -171,7 +172,7 @@ void SceneTown::render(float dt)
 
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
-   std::cout << "here1\n";
+
    for (int i = 0; i < world_info->objects->size(); i++)
    {
       world_info->objects->at(i)->render();
@@ -259,12 +260,14 @@ void SceneInside::EnterScene(std::string loc)
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
 
-   world_info->curScene = this;
+   
    if (loc == "caveDoorway1")
    {
       world_info->player->setWorldPos(0, 450);
       world_info->player->addToDrawList();
       world_info->player->addToCollisionList();
+      world_info->cameraPosX = (int)world_info->player->getWorldX();
+      world_info->cameraPosY = (int)world_info->player->getWorldY();
    }
 }
 
@@ -323,7 +326,7 @@ void SceneInside::update(float dt)
    world_info->objects = &sceneObjects;
    world_info->collideables = &sceneCollideables;
 
-   if (pause == true)
+   if (world_info->pause == true)
       return;
 
 

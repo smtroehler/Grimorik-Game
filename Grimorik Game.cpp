@@ -49,7 +49,7 @@ void gameLoop( WorldInfo *world_info)
       
       if (world_info->curScene->processControl(dtsec) == -1)
          return;
-      //world_info->curScene->update(dtsec);
+
       for (int i = 0; i < world_info->scenes.size(); i++)
       {
          world_info->scenes.at(i)->update(dtsec);
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
    world_info->screenHeight = 900;
    world_info->cameraVelocity = glm::vec3(0, 0, 0);
    world_info->cameraAccel = glm::vec3(0, 0, 0);
-   
+   world_info->pause = false;
    TTF_Init();
    SDL_Init(SDL_INIT_VIDEO);
 

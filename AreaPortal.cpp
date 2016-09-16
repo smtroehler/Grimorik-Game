@@ -1,6 +1,6 @@
 #include "AreaPortal.h"
 #include "PlayerObject.h"
-
+#include "Scenes.h"
 #include <iostream>
 AreaPortal::AreaPortal(int x, int y, int z, int w, int h, WorldInfo *info): 
    Triggers(x, y, z, w, h, info)
@@ -17,8 +17,12 @@ void AreaPortal::transitionToScene()
    for (int i = 0; i < info_ptr->scenes.size(); i++)
    {
       if (info_ptr->scenes.at(i)->getName() == nextScene) {
-         info_ptr->curScene->exitingScene();
-         info_ptr->scenes.at(i)->EnterScene(entryPoint);
+         AreaTransition *next = new AreaTransition();
+         next->setup(info_ptr);
+         next->setScenes(info_ptr->curScene, info_ptr->scenes.at(i));
+         next->EnterScene(entryPoint);
+
+         info_ptr->curScene = next;
       }
    }
    timeExisting = 0;

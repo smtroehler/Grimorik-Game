@@ -105,6 +105,14 @@ void GameObject::setVelocity(glm::vec3 in)
    velZ = in.z;
 }
 
+void GameObject::setColor(int r, int g, int b, int a)
+{
+   colorR = r;
+   colorG = g;
+   colorB = b;
+   colorA = a;
+}
+
 float GameObject::getVelX()
 {
    return velX;

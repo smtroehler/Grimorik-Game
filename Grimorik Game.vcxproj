@@ -170,6 +170,7 @@
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="SceneTown.cpp" />
+    <ClCompile Include="SceneTransitions.cpp" />
     <ClCompile Include="States.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

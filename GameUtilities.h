@@ -48,6 +48,8 @@ struct WorldInfo
 
    PlayerObject *player;
    std::vector<GameScene *> scenes;
+
+   bool pause;
 };
 #endif
 

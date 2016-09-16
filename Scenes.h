@@ -13,6 +13,26 @@
 #include "DialogueBox.h"
 #include "PlayerObject.h"
 #include "AreaPortal.h"
+
+class AreaTransition : public GameScene
+{
+public:
+   AreaTransition(); 
+   virtual void setup(WorldInfo *world);
+   virtual int processControl(float dt);
+   virtual void update(float dt);
+   virtual void render(float dt);
+   void setScenes(GameScene *from, GameScene *to);
+   virtual void EnterScene(std::string in);
+private:
+   GameObject *blackOverlay;
+   GameScene *from;
+   GameScene *to;
+   GameScene *cur;
+   std::string entryPoint;
+   float timeelapsed;
+};
+
 class SceneTown : public GameScene
 {
    public:
