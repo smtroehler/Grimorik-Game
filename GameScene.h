@@ -27,12 +27,18 @@ class GameScene
       };
       std::string getName() { return sceneName; };
 
+      void resetPortals() {
+         for (int i = 0; i < scenePortals.size(); i++)
+            scenePortals.at(i)->reset(); }
+
+
 protected:
    bool setupCalled = false;
    std::string sceneName; 
    WorldInfo *world_info;
    std::vector<GameObject *> sceneObjects;
    std::vector<CollideableObject *> sceneCollideables;
+   std::vector<AreaPortal *> scenePortals;
 };
 
 #endif

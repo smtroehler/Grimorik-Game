@@ -89,6 +89,8 @@ public:
 
    bool getIsSolid() { return isSolid; };
    void setIsSolid(bool in) { isSolid = in; };
+
+protected:
    bool isSolid;
 };
 

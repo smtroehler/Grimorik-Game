@@ -12,28 +12,37 @@ void PlayerObject::render()
 }
 void PlayerObject::update(float dt)
 {
+   if (info_ptr->player_input_disabled)
+      return;
+     
    bool isMovingX = false, isMovingY = false;
+   float velocity = 300;
+   glm::vec2 dir = glm::vec2(0,0);
    if (info_ptr->keystates[SDL_SCANCODE_A])
    {
-      velX = -300;
+      dir.x = -1;
       isMovingX = true;
    }
    if (info_ptr->keystates[SDL_SCANCODE_D])
    {
-      velX = 300;
+      dir.x = 1;
       isMovingX = true;
    }
    if (info_ptr->keystates[SDL_SCANCODE_W])
    {
-      velY = -300;
+      dir.y = -1;
       isMovingY = true;
    }
    if (info_ptr->keystates[SDL_SCANCODE_S])
    {
-      velY = 300;
+      dir.y = 1;
       isMovingY = true;
    }
-
+   if (dir.x || dir.y) {
+      dir = glm::normalize(dir);
+      velX = dir.x * 300;
+      velY = dir.y * 300;
+   }
 
    if (isMovingX == false)
    {

@@ -50,6 +50,7 @@ struct WorldInfo
    std::vector<GameScene *> scenes;
 
    bool pause;
+   bool player_input_disabled;
 };
 #endif
 

@@ -17,6 +17,8 @@ public:
       nextScene = toset; entryPoint = enterAt; 
    };
 
+   void reset() { timeExisting = 0; };
+
 protected:
    std::string nextScene;
    std::string entryPoint;

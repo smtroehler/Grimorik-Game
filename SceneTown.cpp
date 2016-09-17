@@ -64,11 +64,11 @@ void SceneTown::setup(WorldInfo *world)
    
 
 
-   nextAreaPortal = new AreaPortal(0, -500, 0, 100, 60, world_info);
-   SceneInside *nextScene = new SceneInside();
+   AreaPortal *nextAreaPortal = new AreaPortal(0, -500, 0, 100, 60, world_info);
    nextAreaPortal->setNextScene("insideTownCave", "caveDoorway1");
-   world_info->collideables->push_back(nextAreaPortal);
+   nextAreaPortal->addToCollisionList();
    nextAreaPortal->addToDrawList();
+   scenePortals.push_back(nextAreaPortal);
 }
 
 bool pause = false;
@@ -101,7 +101,8 @@ int SceneTown::processControl(float dt)
       }
    }
 
-   
+   if (world_info->player_input_disabled)
+      return 1;
 
    world_info->keystates = SDL_GetKeyboardState(NULL);
    
@@ -159,9 +160,10 @@ void SceneTown::EnterScene(std::string loc)
       world_info->player->addToCollisionList();
       world_info->cameraPosX = (int)world_info->player->getWorldX();
       world_info->cameraPosY = (int)world_info->player->getWorldY();
-    //  world_info->collideables->push_back(world_info->player);
 
    }
+
+   resetPortals();
 }
 
 
@@ -244,14 +246,12 @@ void SceneInside::setup(WorldInfo *world)
    wall->offSetBBox(0, 0, wall->getWidth() / 3, -1);
    world_info->collideables->push_back(wall);
    
-   //world_info->player->addToDrawList();
- //  world_info->collideables->push_back(world_info->player);
 
-
-   nextAreaPortal = new AreaPortal(0, 500, 0, 100, 60, world_info);
- //  SceneInside *nextScene = new SceneInside();
+   AreaPortal *nextAreaPortal = new AreaPortal(0, 500, 0, 100, 60, world_info);
    nextAreaPortal->setNextScene("outsideInTown", "caveDoorway1");
-
+   nextAreaPortal->addToCollisionList();
+   nextAreaPortal->addToDrawList();
+   scenePortals.push_back(nextAreaPortal);
 }
 
 
@@ -269,6 +269,8 @@ void SceneInside::EnterScene(std::string loc)
       world_info->cameraPosX = (int)world_info->player->getWorldX();
       world_info->cameraPosY = (int)world_info->player->getWorldY();
    }
+
+   resetPortals();
 }
 
 int SceneInside::processControl(float dt)
@@ -300,7 +302,6 @@ int SceneInside::processControl(float dt)
    }
 
 
-
    world_info->keystates = SDL_GetKeyboardState(NULL);
 
    //continuous-response keys SEND INPUT TO PLAYER CLASS TO HANDLE MOVEMENT
@@ -317,7 +318,7 @@ int SceneInside::processControl(float dt)
          }
       }
    }
-   nextAreaPortal->update(dt);
+  // nextAreaPortal->update(dt);
    return 1;
 }
 

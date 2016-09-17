@@ -24,6 +24,8 @@ public:
    virtual void render(float dt);
    void setScenes(GameScene *from, GameScene *to);
    virtual void EnterScene(std::string in);
+   void setFadeTime(float in1, float in2) {
+      fadeOut = in1; fadeIn = in2; };
 private:
    GameObject *blackOverlay;
    GameScene *from;
@@ -31,6 +33,7 @@ private:
    GameScene *cur;
    std::string entryPoint;
    float timeelapsed;
+   float fadeOut, fadeIn;
 };
 
 class SceneTown : public GameScene
@@ -50,7 +53,6 @@ class SceneTown : public GameScene
       GameObject *temp_player_static;
   
      
-      AreaPortal *nextAreaPortal;
    //   std::vector<GameObject *> objects;
       
 
@@ -71,15 +73,7 @@ public:
    virtual void EnterScene(std::string entryPoint);
    virtual void exitingScene() { GameScene::exitingScene(); };
 private:
-   GameObject *temp_player_static;
 
-
-   //   std::vector<GameObject *> objects;
-   AreaPortal *nextAreaPortal;
-   
-
-
-   //    std::vector<int> objects;
 };
 
 #endif
