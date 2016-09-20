@@ -96,4 +96,5 @@ protected:
 
 bool isFirstGameObject(GameObject *t, GameObject *o);
 float distanceOfGO(GameObject *t, GameObject *o);
+glm::vec2 normalizeImage(SDL_Surface *temp, int width, int height);
 #endif

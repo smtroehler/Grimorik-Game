@@ -28,7 +28,9 @@ GameObject::GameObject(int x, int y, int z, int w, int h, WorldInfo *info)
    isInteracting = false;
 }
 
-GameObject::~GameObject() {}
+GameObject::~GameObject() {
+   delete(bitmapTex);
+}
 
 int GameObject::getScreenX()
 {

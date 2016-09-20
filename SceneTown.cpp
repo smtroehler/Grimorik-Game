@@ -43,7 +43,7 @@ void SceneTown::setup(WorldInfo *world)
    temp_bg->setImage("materials/test/bg.png");
    temp_bg->addToDrawList();;
 
-   temp_player = new PlayerObject(0, 0, 0, 80, 80, world_info);
+   PlayerObject * temp_player = new PlayerObject(0, 0, 0, 80, 80, world_info);
    temp_player->setImage("materials/test/noct.png");
    temp_player->addToDrawList();
    temp_player->addToCollisionList();
@@ -180,7 +180,7 @@ void SceneTown::render(float dt)
       world_info->objects->at(i)->render();
    }
       
-   SDL_RenderPresent(world_info->renderer);
+ //  SDL_RenderPresent(world_info->renderer);
 }
 
 SceneInside::SceneInside()
@@ -331,13 +331,12 @@ void SceneInside::update(float dt)
       return;
 
 
-   world_info->cameraPosX = (int)world_info->player->getWorldX() ;
-   world_info->cameraPosY = (int)world_info->player->getWorldY();
-
    for (int i = 0; i < world_info->objects->size(); i++)
    {
       world_info->objects->at(i)->update(dt);
    }
+   world_info->cameraPosX = (int)world_info->player->getWorldX();
+   world_info->cameraPosY = (int)world_info->player->getWorldY();
 
    std::sort(world_info->objects->begin(), world_info->objects->end(), isFirstGameObject);
 }
@@ -354,5 +353,5 @@ void SceneInside::render(float dt)
       world_info->objects->at(i)->render();
    }
 
-   SDL_RenderPresent(world_info->renderer);
+  // SDL_RenderPresent(world_info->renderer);
 }

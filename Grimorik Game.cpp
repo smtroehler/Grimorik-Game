@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <cstring>
 #include <vector>
+
 void gameLoop( WorldInfo *world_info)
 {
    int cameraX = 0;
@@ -19,16 +20,12 @@ void gameLoop( WorldInfo *world_info)
    float seconds;
    float prev = 0, cur, dt = 0.0f;
 
-   // create the town scene and make it the current scene
-   GameScene *scene1 = new SceneTown();
+   // create the mainmenu scene and make it the current scene
+   GameScene *scene1 = new MainMenu();
    scene1->setup(world_info);
    world_info->curScene = scene1;
    world_info->scenes.push_back(scene1);
 
-   // create the cave scene
-   scene1 = new SceneInside();
-   scene1->setup(world_info);
-   world_info->scenes.push_back(scene1);
 
    while (1) {
 
@@ -62,6 +59,8 @@ void gameLoop( WorldInfo *world_info)
 
    
       world_info->curScene->render(dtsec);
+
+      SDL_RenderPresent(world_info->renderer);
       
    }
 }

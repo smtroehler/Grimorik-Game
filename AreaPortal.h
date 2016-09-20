@@ -17,7 +17,7 @@ public:
       nextScene = toset; entryPoint = enterAt; 
    };
 
-   void reset() { timeExisting = 0; };
+   virtual void reset() { timeExisting = 0; };
 
 protected:
    std::string nextScene;
@@ -35,7 +35,7 @@ public:
 
    virtual void addToDrawList();
    virtual void removeFromDrawList();
-
+   virtual void reset() { timeExisting = 0; };
 private:
 
    void transitionToScene();

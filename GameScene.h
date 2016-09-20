@@ -8,6 +8,9 @@
 #include <vector>
 #include "GameObject.h"
 #include "PlayerObject.h"
+#include "AreaPortal.h"
+extern class AreaPortal;
+
 class GameScene
 {
    public:
@@ -22,15 +25,10 @@ class GameScene
       virtual void exitingScene() { 
          world_info->objects = &sceneObjects;
          world_info->collideables = &sceneCollideables;
-         world_info->player->removeFromCollisionList();
-         world_info->player->removeFromDrawList();
       };
       std::string getName() { return sceneName; };
 
-      void resetPortals() {
-         for (int i = 0; i < scenePortals.size(); i++)
-            scenePortals.at(i)->reset(); }
-
+      virtual void resetPortals() = 0;
 
 protected:
    bool setupCalled = false;
@@ -40,5 +38,7 @@ protected:
    std::vector<CollideableObject *> sceneCollideables;
    std::vector<AreaPortal *> scenePortals;
 };
+
+
 
 #endif

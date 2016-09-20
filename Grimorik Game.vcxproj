@@ -155,6 +155,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameUtilities.h" />
+    <ClInclude Include="MenuItems.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Scenes.h" />
@@ -167,6 +168,8 @@
     <ClCompile Include="DialogueBox.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grimorik Game.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="MenuItems.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="SceneTown.cpp" />
